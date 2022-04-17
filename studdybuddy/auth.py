@@ -44,7 +44,7 @@ def register():
     return render_template('auth/register.html')
 
 
-@bp.route('/login', method=('GET', 'POST'))
+@bp.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':
         neptun = request.form['neptun']
@@ -84,7 +84,7 @@ def load_logged_in_user():
         ).fetchone()
 
 
-@bo.route('/logout')
+@bp.route('/logout')
 def logout():
     session.clear()
     # TODO: not sure where to redirect, there is no index yet, but who knows
