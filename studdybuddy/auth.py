@@ -29,7 +29,7 @@ def register():
 
         if error is None:
             try:
-                db.exeute(
+                db.execute(
                     "INSERT INTO hallgato (neptun, firstname, lastname, email, password) VALUES (?, ?, ?, ?, ?)",
                     (neptun, firstname, lastname, email, generate_password_hash(password)),
                 )
