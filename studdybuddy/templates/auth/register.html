@@ -2,39 +2,45 @@
 
 {% block content %}
     <div class="container">
-        <h1 class="white-text">{% block title %}Register{% endblock %}</h1>
         <div class="row">
-            <form method="POST" class="col s6" class="white-text">
+            <form method="POST" class="col s6 right light-blue white-text" style="margin: 20px; padding: 10px">
+                <h1 class="white-text center">{% block title %}Register{% endblock %}</h1>
                 <div class="row">
-                    <div class="input-field col s12">
+                    <div class="white input-field col s10 offset-s1">
                         <label for="neptun">Neptun ID</label>
                         <input name="neptun" id="neptun" type="text" class="validate" required>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="input-field col s6">
+                    <div class="white input-field col s5 offset-s1">
                         <label for="firstname">First Name</label>
                         <input name="firstname" id="firstname" type="text" required>
                     </div>
-                    <div class="input-field col s6">
+                    <div class="white input-field col s5">
                         <label for="lastname">Last Name</label>
                         <input name="lastname" id="lastname" type="text" required>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="input-field col s12">
+                    <div class="white input-field col s10 offset-s1">
                         <label for="email">Email</label>
                         <input type="email" name="email" id="email">
                     </div>
                 </div>
                 <div class="row">
-                    <div class="input-field col s12">
+                    <div class="white input-field col s10 offset-s1">
                         <label for="password">Password</label>
                         <input type="password" name="password" id="password" required>
                     </div>
                 </div>          
-                <button class="btn waves-effect waves-light" type="submit" name="action">Submit</button>        
+                <button class="col s4 offset-s4 btn waves-effect waves-light center" type="submit" name="action">
+                    Register
+                    <i class="material-icons right">send</i>
+                </button>        
             </form>
+            <div class="left col s4">
+                <img class="row" src="{{ url_for('static', filename='logo.png') }}" width="400" height="400" style="margin-top: 50px">
+            </div>
         </div>
     </div>
 {% endblock %}
