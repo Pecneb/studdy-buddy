@@ -64,7 +64,7 @@ def login():
             session.clear()
             session['neptun'] = user['neptun']
             # TODO: this will not return to the index page, rather to the users main page
-            return redirect(url_for('index'))
+            return redirect(url_for('user.profile'))
 
         flash(error)
 
@@ -89,7 +89,7 @@ def logout():
     session.clear()
     # TODO: not sure where to redirect, there is no index yet, but who knows
     # if there will be none, then this should redirect to the /auth/login page
-    return redirect(url_for('index'))
+    return redirect(url_for('auth.login'))
 
 def login_required(view):
     @functools.wraps(view)
