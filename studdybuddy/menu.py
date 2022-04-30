@@ -5,11 +5,9 @@ from flask import (
 from studdybuddy.db import get_db
 from studdybuddy.auth import login_required
 
-bp = Blueprint('menu', __name__, url_prefix='/menu')
+bp = Blueprint('menu', __name__)
 
-@bp.route('/', methods=('GET', 'POST'))
+@bp.route('/')
 @login_required
-def menu():
-    if request.method == 'POST':
-        pass
-    render_template('menu/menu.html')
+def index():
+    return render_template('menu/index.html')

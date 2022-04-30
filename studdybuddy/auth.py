@@ -17,7 +17,9 @@ def register():
         lastname = request.form['lastname']
         password = request.form['password']
         email = request.form['email']
+        
         db = get_db()
+        
         error = None
 
         if not neptun:
@@ -49,8 +51,11 @@ def login():
     if request.method == 'POST':
         neptun = request.form['neptun']
         password = request.form['password']
+        
         db = get_db()
+        
         error = None
+        
         user = db.execute(
             'SELECT * FROM hallgato WHERE neptun = ?', (neptun,)
         ).fetchone()
@@ -64,7 +69,7 @@ def login():
             session.clear()
             session['neptun'] = user['neptun']
             # TODO: this will not return to the index page, rather to the users main page
-            return redirect(url_for('user.profile'))
+            return redirect(url_for('menu.index'))
 
         flash(error)
 
@@ -98,3 +103,4 @@ def login_required(view):
             return redirect(url_for('auth.login'))
 
         return view(**kwargs)
+    return wrapped_view

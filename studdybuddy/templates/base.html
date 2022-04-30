@@ -2,23 +2,63 @@
 <title>{% block title %}{% endblock %} - Studdy Buddy</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<script>document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.sidenav');
+    var instances = M.Sidenav.init(elems);
+    });
+</script>
 <!--Let browser know website is optimized for mobile-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<nav class="light-blue">
+{% if g.user %}
+<nav class="lime darken-1">
     <div class="nav-wrapper">
-        <a href="#" class="brand-logo center">Studdy Buddy</a>
-        <ul id="nav-mobile" class="left hide-on-med-and-down">
-            {% if g.user %}
-                <li><span>{{ g.user['firstname'] }} {{ g.user['lastname'] }}</span></li>
-                <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
-            {% else %}
-                <li><a href="{{ url_for('auth.register') }}">Register</a></li>
-                <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
-            {% endif %}
+        <a href="{{ url_for('menu.index') }}" class="brand-logo center center-align">Studdy Buddy</a>
+        <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <ul class="right hide-on-med-and-down">
+            <li class="row">
+                <i class="material-icons col s3">account_circle</i>
+                <span class="col s9">{{ g.user['firstname'] }} {{ g.user['lastname'] }}</span>
+            </li>
+            <li>
+                <a href="{{ url_for('auth.logout') }}">
+                <i class="material-icons">power_settings_new</i>
+                </a>
+            </li>
         </ul>
     </div>
 </nav>
-<body class="lime darken-1">
+<!--This is for small displays-->
+<ul class="sidenav lime darken-1" id="mobile-demo">
+    <li class="row">
+        <div class="col s12 center-align">
+            <i class="material-icons center-align">account_circle</i>
+            <span>{{ g.user['firstname'] }} {{ g.user['lastname'] }}</span>
+        </div>
+    </li>
+    <li class="row">
+        <a class="col s12 center-align" href="{{ url_for('auth.logout') }}">
+            Log Out
+        </a>
+    </li>
+</ul>
+{% else %}
+<nav class=" light-blue darken-3">
+    <div class="nav-wrapper">
+        <a href="{{ url_for('menu.index') }}!" class="brand-logo center">Studdy Buddy</a>
+        <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <ul class="right hide-on-med-and-down">
+            <li><a href="{{ url_for('auth.register') }}">Register</a></li>
+            <li><a href="{{ url_for('auth.login') }}">Log In</a></li>
+        </ul>
+    </div>
+</nav>
+<!--This is for small displays-->
+<ul class="sidenav light-blue darken-3" id="mobile-demo" >
+    <li><a class="center-align white-text" href="{{ url_for('auth.register') }}">Register</a></li>
+    <li><a class="center-align white-text" href="{{ url_for('auth.login') }}">Log In</a></li>
+</ul>
+{% endif %}
+<body {% if g.user %}class="light-blue darken-3"{% else %}class="lime darken-1"{% endif %}>
     <section class="content">
         <header>
             {% block header %}{% endblock %}

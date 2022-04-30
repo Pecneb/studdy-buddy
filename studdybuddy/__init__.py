@@ -1,5 +1,8 @@
 import os
-from flask import Flask
+from flask import Flask, render_template
+
+def page_not_found(e):
+  return render_template('404.html'), 404
 
 def create_app(test_config=None):
     # Create and configure the app
@@ -22,13 +25,16 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+    app.register_error_handler(404, page_not_found)
+
     from . import db
     db.init_app(app)
 
     from . import auth
     app.register_blueprint(auth.bp)
 
-    # from . import user
-    # app.register_blueprint(user.bp)
+    from . import menu
+    app.register_blueprint(menu.bp)
+    app.add_url_rule('/', endpoint='index')
 
     return app
