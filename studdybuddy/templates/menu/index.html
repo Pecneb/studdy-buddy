@@ -1,14 +1,12 @@
 {% extends 'base.html' %}
 
-{% block header %}
-<h1>{% block title %}{% endblock %}</h1>
-{% endblock %}
+<h1>{% block title %}Menu{% endblock %}</h1>
 
 {% block content %}
 <div class="row"></div>
 <div class="row">
     <div class="col s4 hoverable center-align">
-        <a class="row" href="">
+        <a class="row" href="{{ url_for('findpartner.findpartner') }}">
             <img class="col s12" src="{{ url_for('static', filename='tanulotars.png')}}" alt="">
         </a>
     </div>

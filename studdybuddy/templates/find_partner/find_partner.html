@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Findpartner{% endblock %}
+
+{% block header %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('select');
+        var instances = M.FormSelect.init(elems, options);
+      });
+</script>
+<div class="row">
+    <a class="col 1" href="{{ url_for('menu.index') }}"><img width="50%" height="50%" style="margin-top: 15%;" src="{{ url_for('static', filename='back_arrow.png') }}" alt=""></a>
+    <div class="col 3 row">
+        <img class="col 4" width="15%" height="15%" src="{{ url_for('static', filename='book_1.png') }}" alt="">
+        <img class="col 8" width="40%" height="40%" style="margin-top: 5%;" src="{{ url_for('static', filename='tanulotars_kereses.png') }}" alt="" >
+    </div>
+    <div class="col 5">
+        <form method="post">
+            <div class="input-field col 12">
+                <label for="classes"><img width="60%" height="60%" style="margin-top: 10%;" src="{{ url_for('static', filename='tantargy_valasztas.png') }}" alt=""></label>
+                <select name="classes">
+                    <option value="testval">test</option>
+                    {% for class in classes %}
+                        <option value="{{ class['tnev'] }}">{{ class['tnev'] }}</option>
+                    {% endfor %}
+                </select>
+            </div> 
+        </form>
+    </div>
+</div>
+{% endblock %}

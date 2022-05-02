@@ -14,12 +14,12 @@
     <div class="nav-wrapper">
         <a href="{{ url_for('menu.index') }}" class="brand-logo center center-align">Studdy Buddy</a>
         <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-        <ul class="right hide-on-med-and-down">
-            <li class="row">
-                <i class="material-icons col s3">account_circle</i>
-                <span class="col s9">{{ g.user['firstname'] }} {{ g.user['lastname'] }}</span>
+        <ul class="right hide-on-med-and-down row">
+            <li class="col 10 row">
+                <i class="material-icons col 3">account_circle</i>
+                <span class="col 9">{{ g.user['firstname'] }} {{ g.user['lastname'] }}</span>
             </li>
-            <li>
+            <li class="col 2">
                 <a href="{{ url_for('auth.logout') }}">
                 <i class="material-icons">power_settings_new</i>
                 </a>
