@@ -10,25 +10,27 @@
 <!--Let browser know website is optimized for mobile-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 {% if g.user %}
-<nav class="lime darken-1">
+<nav style="background-color: #F5F699">
     <div class="nav-wrapper">
-        <a href="{{ url_for('menu.index') }}" class="brand-logo center center-align">Studdy Buddy</a>
+        <a href="{{ url_for('menu.index') }}" class="brand-logo center">
+            <img src="{{ url_for('static', filename='Studdy_Buddy.png')}}" alt="">
+        </a>
         <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-        <ul class="right hide-on-med-and-down">
+        <ul class="right hide-on-med-and-down black-text">
             <li class="row">
                 <i class="material-icons col s3">account_circle</i>
                 <span class="col s9">{{ g.user['firstname'] }} {{ g.user['lastname'] }}</span>
             </li>
             <li>
-                <a href="{{ url_for('auth.logout') }}">
-                <i class="material-icons">power_settings_new</i>
+                <a class="black" href="{{ url_for('auth.logout') }}">
+                <i class="material-icons" style="border-radius: 100%;">power_settings_new</i>
                 </a>
             </li>
         </ul>
     </div>
 </nav>
 <!--This is for small displays-->
-<ul class="sidenav lime darken-1" id="mobile-demo">
+<ul class="sidenav" style="background-color: #F5F699;" id="mobile-demo">
     <li class="row">
         <div class="col s12 center-align">
             <i class="material-icons center-align">account_circle</i>
@@ -42,9 +44,11 @@
     </li>
 </ul>
 {% else %}
-<nav class=" light-blue darken-3">
+<nav style="background-color: #4784A7">
     <div class="nav-wrapper">
-        <a href="{{ url_for('menu.index') }}!" class="brand-logo center">Studdy Buddy</a>
+        <a href="{{ url_for('menu.index') }}!" class="brand-logo center">
+            <img src="{{ url_for('static', filename='Studdy_Buddy.png')}}" alt="">
+        </a>
         <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
         <ul class="right hide-on-med-and-down">
             <li><a href="{{ url_for('auth.register') }}">Register</a></li>
@@ -53,12 +57,12 @@
     </div>
 </nav>
 <!--This is for small displays-->
-<ul class="sidenav light-blue darken-3" id="mobile-demo" >
+<ul class="sidenav" style="background-color: #4784A7" id="mobile-demo" >
     <li><a class="center-align white-text" href="{{ url_for('auth.register') }}">Register</a></li>
     <li><a class="center-align white-text" href="{{ url_for('auth.login') }}">Log In</a></li>
 </ul>
 {% endif %}
-<body {% if g.user %}class="light-blue darken-3"{% else %}class="lime darken-1"{% endif %}>
+<body {% if g.user %}style="background-color: #4784A7;"{% else %}style="background-color: #F5F699;"{% endif %}>
     <section class="content">
         <header>
             {% block header %}{% endblock %}
