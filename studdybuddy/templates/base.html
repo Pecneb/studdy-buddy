@@ -2,11 +2,6 @@
 <title>{% block title %}{% endblock %} - Studdy Buddy</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<script>document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.sidenav');
-    var instances = M.Sidenav.init(elems);
-    });
-</script>
 <!--Let browser know website is optimized for mobile-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 {% if g.user %}
@@ -16,25 +11,14 @@
             <img src="{{ url_for('static', filename='Studdy_Buddy.png')}}" alt="">
         </a>
         <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-<<<<<<< HEAD
         <ul class="right hide-on-med-and-down black-text">
             <li class="row">
-                <i class="material-icons col s3">account_circle</i>
-                <span class="col s9">{{ g.user['firstname'] }} {{ g.user['lastname'] }}</span>
+                <i class="material-icons col 2" class="material-icons">account_circle</i>
+                <span class="col 10">{{ g.user['firstname'] }} {{ g.user['lastname'] }}</span>
             </li>
             <li>
                 <a class="black" href="{{ url_for('auth.logout') }}">
                 <i class="material-icons" style="border-radius: 100%;">power_settings_new</i>
-=======
-        <ul class="right hide-on-med-and-down row">
-            <li class="col 10 row">
-                <i class="material-icons col 3">account_circle</i>
-                <span class="col 9">{{ g.user['firstname'] }} {{ g.user['lastname'] }}</span>
-            </li>
-            <li class="col 2">
-                <a href="{{ url_for('auth.logout') }}">
-                <i class="material-icons">power_settings_new</i>
->>>>>>> tmp_rebasing
                 </a>
             </li>
         </ul>
@@ -83,6 +67,17 @@
         {% endfor %}
         {% block content %}{% endblock %}
         <!--JavaScript at end of body for optimized loading-->
+        <script type = "text/javascript" src = "https://code.jquery.com/jquery-2.1.1.min.js"></script> 
+        <script type="text/javascript" src="{{ url_for('static', filename='materialize.js') }}"></script>
+        <script>document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('.sidenav');
+            var instances = M.Sidenav.init(elems);
+            });
+        </script>
+        <script>
+            $(document).ready(function(){
+                $('select').formSelect();
+            });
+        </script>
     </section>
-    <script type="text/javascript" src="{{ url_for('static', filename='materialize.js') }}"></script>
 </body>

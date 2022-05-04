@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS hallgato;
 DROP TABLE IF EXISTS tanulotars;
+DROP TABLE IF EXISTS post;
 DROP TABLE IF EXISTS csoport;
 DROP TABLE IF EXISTS korrepetalas;
 DROP TABLE IF EXISTS korrepetalas_resztvevo;
@@ -20,6 +21,15 @@ CREATE TABLE tanulotars (
   PRIMARY KEY (hallgatoneptun, 
   hallgatoneptun2));
 
+CREATE TABLE post (
+  id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  hallgatoneptun varchar(6) NOT NULL,
+  tkod varchar(255) NOT NULL,
+  body varchar(255) NOT NULL,
+  created date NOT NULL,
+  FOREIGN KEY(hallgatoneptun) REFERENCES hallgato(neptun),
+  FOREIGN KEY(tkod) REFERENCES tantargy(tkod));
+
 CREATE TABLE tantargy (
   tkod varchar(255) NOT NULL, 
   tnev varchar(255) NOT NULL, 
@@ -28,7 +38,7 @@ CREATE TABLE tantargy (
 CREATE TABLE korrepetalas (
   id                INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
   korrepetaloneptun varchar(6) NOT NULL, 
-    korrepetalasnev   varchar(255) NOT NULL, 
+  korrepetalasnev   varchar(255) NOT NULL, 
   tkod              varchar(255) NOT NULL, 
   tol               date NOT NULL, 
   ig                date NOT NULL);
