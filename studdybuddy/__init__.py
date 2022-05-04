@@ -37,4 +37,7 @@ def create_app(test_config=None):
     app.register_blueprint(menu.bp)
     app.add_url_rule('/', endpoint='index')
 
+    from . import find_partner
+    app.register_blueprint(find_partner.bp)
+
     return app
