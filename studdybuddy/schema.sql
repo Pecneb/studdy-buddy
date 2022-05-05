@@ -26,7 +26,7 @@ CREATE TABLE post (
   hallgatoneptun varchar(6) NOT NULL,
   tkod varchar(255) NOT NULL,
   body varchar(255) NOT NULL,
-  created date NOT NULL,
+  created date DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY(hallgatoneptun) REFERENCES hallgato(neptun),
   FOREIGN KEY(tkod) REFERENCES tantargy(tkod));
 

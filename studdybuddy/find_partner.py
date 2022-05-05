@@ -24,9 +24,23 @@ def findpartner():
     ).fetchall()
     return render_template('find_partner/find_partner.html', posts=posts, tantargyak=tantargyak)
 
-@bp.route('/createpost', methods=('GET', 'POST'))
+@bp.route('/create', methods=('GET', 'POST'))
 @login_required
 def create_post():
     if request.method == 'POST':
-        pass
+        title = request.form['title']
+        body = request.form['body']
+        hallgato = g.user['neptun']
+        error = None
+
+        if title is None:
+            error = "Title required."
+        elif body is None:
+            error = "Text body required."
+
+        if error is not None:
+            flash(error)
+        else:
+            pass
+        redirect(url_for('findpartner.findpartner'))
     return render_template('find_partner/create_post.html')

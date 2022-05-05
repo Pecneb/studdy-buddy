@@ -68,7 +68,6 @@ def login():
         if error is None:
             session.clear()
             session['neptun'] = user['neptun']
-            # TODO: this will not return to the index page, rather to the users main page
             return redirect(url_for('menu.index'))
 
         flash(error)
