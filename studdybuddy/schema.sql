@@ -25,6 +25,7 @@ CREATE TABLE post (
   id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   hallgatoneptun varchar(6) NOT NULL,
   tkod varchar(255) NOT NULL,
+  title varchar(100) NOT NULL,
   body varchar(255) NOT NULL,
   created date DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY(hallgatoneptun) REFERENCES hallgato(neptun),
