@@ -25,18 +25,13 @@
                 </div>
             </div>
             <div class="input-field container">
-                <select class="">
-                  <option value="" disabled selected>Choose Class</option>
-                  <!--Test options-->
-                  {% for i in range(1, 10) %}
-                    <option value="">{{ "Tantargy" }} {{ i }}</option>
-                  {% endfor %}
-                  <!--End of test options-->
-                  {% for tantargy in tantargyak %}
-                    <option value="{{ tantargy['tnev'] }}">{{ tantargy['tnev'] }}</option>
-                  {% endfor %}
+                <select name="tantargy">
+                    <option value="" disabled selected>Select subject</option>
+                    {% for tantargy in tantargyak %}
+                    <option  value="{{ tantargy['tkod'] }}">{{ tantargy['tnev'] }}</option>
+                    {% endfor %}
                 </select>
-                <label>Select Class</label>
+                <label>Select subject</label>
               </div>
             <div class="row">
                 <button class="btn waves-effect waves-light black col s2 offset-s5" type="submit" name="action">Create
