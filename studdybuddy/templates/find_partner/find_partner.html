@@ -13,6 +13,7 @@
         <form method="post" class="col s12 valign-wrapper">
             <div class="input-field col s10">
                 <select name="tantargy">
+                    <option value="all">All</option>
                     {% for tantargy in tantargyak %}
                     <option value="{{ tantargy['tkod'] }}">{{ tantargy['tnev'] }}</option>
                     {% endfor %}
