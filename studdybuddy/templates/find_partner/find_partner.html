@@ -35,17 +35,25 @@
     <div>
         <div class="col s4">
             <div class="card blue-grey darken-1">
-            <div class="card-content white-text">
-                <span class="card-title">{{ post['title'] }}</span>
-                <p>{{ post['body'] }}</p>
-                <p>User: {{ post['hallgatonev'] }}</p>
-                <p>Tantargy: {{ post['tnev'] }}</p>
-                <p>Creation date: {{ post['created'] }}</p>
-            </div>
-            <div class="card-action">
-                <a href="#">Contact</a>
-                <a href="#">Add to buddies</a>
-            </div>
+                <div class="card-content white-text">
+                    <span class="card-title">{{ post['title'] }}</span>
+                    <p>{{ post['body'] }}</p>
+                    <p>User: {{ post['hallgatonev'] }}</p>
+                    <p>Tantargy: {{ post['tnev'] }}</p>
+                    <p>Creation date: {{ post['created'] }}</p>
+                </div>
+                <form method="post">
+                        <div class="card-action">
+                            <button value="contact" class="btn waves-effect waves-light" style="background-color: transparent; color: #ffab40;" type="submit" name="action">
+                            Contact
+                            <i class="material-icons right">send</i>
+                            </button>
+                            <button value="add" class="btn waves-effect waves-light" style="background-color: transparent; color: #ffab40;" type="submit" name="action">
+                            Add to buddies
+                            <i class="material-icons right">add_circle</i>
+                            </button>   
+                        </div>
+                </form>
             </div>
         </div>
     </div>

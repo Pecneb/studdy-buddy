@@ -67,8 +67,7 @@ def create_post():
                 db.commit()
             except Error as e:
                 print(e)
-            pass
-        redirect(url_for('findpartner.findpartner'))
+        return redirect(url_for('.findpartner'))
 
     db = get_db()
     tantargyak = db.execute(
