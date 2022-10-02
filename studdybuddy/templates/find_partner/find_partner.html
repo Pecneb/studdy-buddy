@@ -13,6 +13,7 @@
         <form method="post" class="col s12 valign-wrapper">
             <div class="input-field col s10">
                 <select name="tantargy">
+                    <option value="all">All</option>
                     {% for tantargy in tantargyak %}
                     <option value="{{ tantargy['tkod'] }}">{{ tantargy['tnev'] }}</option>
                     {% endfor %}
@@ -37,6 +38,8 @@
             <div class="card-content white-text">
                 <span class="card-title">{{ post['title'] }}</span>
                 <p>{{ post['body'] }}</p>
+                <p>User: {{ post['hallgatonev'] }}</p>
+                <p>Tantargy: {{ post['tnev'] }}</p>
                 <p>Creation date: {{ post['created'] }}</p>
             </div>
             <div class="card-action">
