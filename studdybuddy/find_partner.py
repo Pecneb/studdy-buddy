@@ -20,7 +20,14 @@ def findpartner():
     ).fetchall()
     # Query posts from db
     filt = g.get('tfilter')
-    if filt is not None:
+    if filt == 'all' or filt is None:
+        posts = db.execute(
+            'SELECT p.title, p.body, strftime("%Y-%m-%d %H:%M:%S", p.created) "created", h.firstname + ' ' + h.lastname as "hallgatonev", t.tnev' 
+            ' FROM post p JOIN hallgato h ON p.hallgatoneptun = h.neptun'
+            ' JOIN tantargy t ON t.tkod = p.tkod'
+            ' ORDER BY created DESC',
+        ).fetchall()
+    else:
         posts = db.execute(
             'SELECT p.title, p.body, strftime("%Y-%m-%d %H:%M:%S", p.created) "created", h.firstname + ' ' + h.lastname as "hallgatonev", t.tnev' 
             ' FROM post p JOIN hallgato h ON p.hallgatoneptun = h.neptun'
@@ -29,14 +36,6 @@ def findpartner():
             ' ORDER BY created DESC',
             (filt,)
         ).fetchall()
-    else:
-        posts = db.execute(
-            'SELECT p.title, p.body, strftime("%Y-%m-%d %H:%M:%S", p.created) "created", h.firstname + ' ' + h.lastname as "hallgatonev", t.tnev' 
-            ' FROM post p JOIN hallgato h ON p.hallgatoneptun = h.neptun'
-            ' JOIN tantargy t ON t.tkod = p.tkod'
-            ' ORDER BY created DESC',
-        ).fetchall()
-    g.tfilter = None
     return render_template('find_partner/find_partner.html', posts=posts, tantargyak=tantargyak)
 
 @bp.route('/create', methods=('GET', 'POST'))
@@ -68,8 +67,7 @@ def create_post():
                 db.commit()
             except Error as e:
                 print(e)
-            pass
-        redirect(url_for('findpartner.findpartner'))
+        return redirect(url_for('.findpartner'))
 
     db = get_db()
     tantargyak = db.execute(
