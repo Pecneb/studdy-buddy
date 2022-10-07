@@ -1,8 +1,10 @@
 import sqlite3
 
 import click
-from flask import current_app, g
+from flask import current_app, g, Flask
 from flask.cli import with_appcontext
+
+app = Flask(__name__, instance_relative_config=True)
 
 def get_db():
     if 'db' not in g:
@@ -27,6 +29,8 @@ def init_db():
 
     with current_app.open_resource('schema.sql') as f:
         db.executescript(f.read().decode('utf8'))
+        print(app.instance_path + '/studdybuddy.sqlite')
+
 
 
 @click.command('init-db')

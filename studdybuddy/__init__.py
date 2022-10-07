@@ -22,6 +22,7 @@ def create_app(test_config=None):
     # ensure the instance folder exists
     try:
         os.makedirs(app.instance_path)
+        print(app.instance_path)
     except OSError:
         pass
 
@@ -39,5 +40,8 @@ def create_app(test_config=None):
 
     from . import find_partner
     app.register_blueprint(find_partner.bp)
+
+    from . import find_group
+    app.register_blueprint(find_group.bp)
 
     return app
