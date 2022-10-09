@@ -22,7 +22,7 @@ class Post(DB.Model):
     subject_id = DB.Column(DB.String(255), ForeignKey("subject.id"), nullable=False)
     title = DB.Column(DB.String(30), nullable=False)
     body = DB.Column(DB.String(500), nullable=False)
-    created = DB.Column(DB.DateTime(timezone=True), default=datetime.utcnow)
+    created = DB.Column(DB.DateTime(timezone=True), default=datetime.now())
 
 class Subject(DB.Model):
     __tablename__ = "subject"
@@ -48,7 +48,7 @@ class Group(DB.Model):
     __tablename__ = "group"
     id = DB.Column(DB.Integer, autoincrement=True, primary_key=True)
     name = DB.Column(DB.String(255), nullable=False)
-    created = DB.Column(DB.DateTime(timezone=True), default=datetime.utcnow())
+    created = DB.Column(DB.DateTime(timezone=True), default=datetime.now())
 
 class GroupMember(DB.Model):
     __tablename__ = "group_member"

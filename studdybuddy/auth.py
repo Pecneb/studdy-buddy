@@ -70,7 +70,7 @@ def login():
 
         if error is None:
             session.clear()
-            session['neptun'] = user['neptun']
+            session['neptun'] = user.neptun
             return redirect(url_for('menu.index'))
 
         flash(error)

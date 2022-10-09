@@ -28,7 +28,7 @@ def findpartner():
     else:
         posts = db.session.execute(
             db.select(Post)
-            .where(Post.id==filt)
+            .where(Post.subject_id==filt)
             .order_by(Post.created)
         ).scalars()
     return render_template('find_partner/find_partner.html', posts=posts, tantargyak=tantargyak)
@@ -40,7 +40,7 @@ def create_post():
         title = request.form['title']
         body = request.form['body']
         tkod = request.form['tantargy']
-        hallgato = g.user['neptun']
+        hallgato = g.user.neptun
         error = None
 
         if title is None:
