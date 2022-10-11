@@ -9,7 +9,7 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
-        DATABASE=os.path.join(app.instance_path, 'studdybuddy.sqlite'),
+        SQLALCHEMY_DATABASE_URI=f"sqlite:///{os.path.join(app.instance_path, 'studdybuddy.db')}",
     )
 
     if test_config is None:
@@ -28,7 +28,9 @@ def create_app(test_config=None):
     app.register_error_handler(404, page_not_found)
 
     from . import db
-    db.init_app(app)
+    db.DB.init_app(app)
+    with app.app_context():
+        db.DB.create_all()
 
     from . import auth
     app.register_blueprint(auth.bp)
