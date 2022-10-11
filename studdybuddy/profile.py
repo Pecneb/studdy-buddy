@@ -24,9 +24,10 @@ def profile():
                 # user.neptun = request.form["neptun"] if user.neptun != request.form["neptun"] else user.neptun
                 # user.email = request.form["email"] if user.email != request.form["email"] else user.email
                 # user.password = request.form["new_password"] if user.password != request.form["new_password"] else user.password
-                # print(db.session.dirty)
                 
                 #region end~~~~~
+                
+                
                 
                 #region start 2 - effective~~~~~
                 #looks primitive, but more resource efficient and stupid user safe
@@ -51,11 +52,12 @@ def profile():
                     
                 if new_pswd != '' and new_pswd!=None:
                     user.password = new_pswd
-                
-                print(db.session.dirty)
-                
                 #region end~~~~~
                 
+                
+                if len(db.session.dirty)>0:
+                    db.session.commit()
+                    flash("Changes saved","success")
                 
             elif 'delete' in request.form:
                 db.session.delete(user)
@@ -63,8 +65,8 @@ def profile():
                 db.session.commit()
                 return render_template('auth/login.html')
             else:
-                flash("POST method failed") 
+                flash("POST method failed","error") 
         return render_template('profile/profile.html', profile=user)
     except DBAPIError as e:
-        flash(e)
+        flash(e,"error")
         print(e)

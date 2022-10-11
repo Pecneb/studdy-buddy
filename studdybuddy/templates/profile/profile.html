@@ -9,15 +9,6 @@
   </div>
 </div>
 {%endblock%} {% block content %}
-<div class="flash">
-    {% with messages = get_flashed_messages() %} {% if messages %}
-    <ul class="flash">
-      {% for message in messages %}
-      <li style="background: #ff0000">{{ message }}</li>
-      {% endfor %}
-    </ul>
-    {% endif %} {% endwith %}
-  </div>
 <div class="col s6">
   <div class="row">
     <form class="col s6 offset-s3" method="POST">
