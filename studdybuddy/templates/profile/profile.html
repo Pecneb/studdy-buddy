@@ -1,6 +1,73 @@
-
 {% extends 'base.html' %}
+<h1>{% block title %}Profile{% endblock %}</h1>
+{%block header%}
+<div class="row">
+  <div class="col s6">
+    <a class="col center" href="{{ url_for('menu.index') }}"
+      ><img width="45%" height="45%" src="{{ url_for('static', filename='back_arrow.png') }}" alt=""
+    /></a>
+  </div>
+</div>
+{%endblock%} {% block content %}
+<div class="flash">
+    {% with messages = get_flashed_messages() %} {% if messages %}
+    <ul class="flash">
+      {% for message in messages %}
+      <li style="background: #ff0000">{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %} {% endwith %}
+  </div>
+<div class="col s6">
+  <div class="row">
+    <form class="col s6 offset-s3" method="POST">
+      <div class="row">
+        <div class="input-field col s6">
+          <i class="material-icons prefix">account_circle</i>
+          <input name="firstname" id="icon_prefix_firstname" value="{{profile.firstname}}" type="text" class="validate" />
+          <label for="icon_prefix_firstname">First Name</label>
+        </div>
+        <div class="input-field col s6">
+          <i class="material-icons prefix">account_circle</i>
+          <input name="lastname" id="icon_prefix_lastname" value="{{profile.lastname}}" type="text" class="validate" />
+          <label for="icon_prefix_lastname">Last Name</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s8 offset-s2">
+          <input name="neptun" id="neptun" value="{{profile.neptun}}" type="text" class="validate" />
+          <label for="neptun">Neptun</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s8 offset-s2">
+          <input name="email" id="email" value="{{profile.email}}" type="email" class="validate" />
+          <label for="email">Email</label>
+          <span class="helper-text" data-error="wrong" data-success="right">Email</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s8 offset-s2">
+          <input name="new_password" id="password" value="" type="password" class="validate" />
+          <label for="password">New Password</label>
+        </div>
+        <div class="row">
+          <div class="col s6 center">
+            <button class="btn waves-effect deep-orange darken-4" style="color: black" name="delete">
+              Delete Profile
+              <i class="material-icons right">delete</i>
+            </button>
+          </div>
+          <div class="col s6 center">
+            <button class="btn waves-effect lime accent-1" style="color: black" type="submit" name="modify">
+              Modify Profile
+              <i class="material-icons right">send</i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
 
-{% block header %}
-    <h1>{% block title %}{{ g.user['firstname'] }} {{ g.user['lastname'] }}'s profile{% endblock %}</h1>
 {% endblock %}
