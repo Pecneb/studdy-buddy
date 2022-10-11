@@ -28,7 +28,7 @@
                 <select name="tantargy">
                     <option value="" disabled selected>Select subject</option>
                     {% for tantargy in tantargyak %}
-                    <option  value="{{ tantargy['tkod'] }}">{{ tantargy['tnev'] }}</option>
+                    <option  value="{{ tantargy.id }}">{{ tantargy.name }}</option>
                     {% endfor %}
                 </select>
                 <label>Select subject</label>
