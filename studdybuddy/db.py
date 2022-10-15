@@ -35,7 +35,8 @@ class Tutoring(DB.Model):
     tutor_neptun = DB.Column(DB.String(6), ForeignKey("student.neptun"), nullable=False)
     tutoring_name = DB.Column(DB.String(255), nullable=False)
     subject_id = DB.Column(DB.String(255), ForeignKey("subject.id"), nullable=False)
-    start_datetime = DB.Column(DB.DateTime(timezone=True), default=datetime.utcnow())
+    created = DB.Column(DB.DateTime(timezone=True), default=datetime.now())
+    start_datetime = DB.Column(DB.DateTime(timezone=True), default=datetime.now())
     end_datetime = DB.Column(DB.DateTime(timezone=True), nullable=False)
 
 class TutoringParticipant(DB.Model):
