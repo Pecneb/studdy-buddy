@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Find Group{% endblock %}
+
+{% block header %}
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row" style="background-color: #F5F699; border-radius: 10px; margin-top: 10%">
+        <form class="col s12" method="POST">
+            <div class="container">
+                <div class="row">
+                    <div class="input-field col s6">
+                        <input name="title" id="input_text" type="text" data-length="10">
+                        <label for="input_text">Title</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <select name="team_size">
+                            <option value="" disabled selected>Team Size</option>
+                            {% for i in range(2,11) %}
+                            <option  value="{{ i }}">{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                        <label>Select Team Size</label>
+                      </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <textarea name="description" id="textarea2" class="materialize-textarea" data-length="120"></textarea>
+                        <label for="textarea2">Description</label>
+                    </div>
+                </div>
+            </div>
+            <div class="input-field container">
+                <select name="tantargy">
+                    <option value="" disabled selected>Select subject</option>
+                    {% for tantargy in tantargyak %}
+                    <option  value="{{ tantargy['tkod'] }}">{{ tantargy['tnev'] }}</option>
+                    {% endfor %}
+                </select>
+                <label>Select subject</label>
+              </div>
+            <div class="row">
+                <button class="btn waves-effect waves-light black col s2 offset-s5" type="submit" name="action">Create
+                    <i class="material-icons right">send</i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

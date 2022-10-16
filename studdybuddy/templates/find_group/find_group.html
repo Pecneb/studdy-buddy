@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Find Group{% endblock %}
+
+{% block header %}
+<div class="row valign-wrapper">
+    <a class="waves-effect waves-light btn black col s2" href="{{ url_for('findgroup.create_group') }}">Create Group</a>
+</div>
+{% endblock %}
+{% block content %}
+<div class="row">
+    {% for group in groups %}
+    <div>
+        <div class="col s4">
+            <div class="card blue-grey darken-1">
+            <div class="card-content white-text">
+                <span class="card-title">{{ group['name'] }}</span>
+                <p>{{ group['desc'] }}</p>
+            </div>
+            <div class="card-action">
+                <a href="#">Contact</a>
+                <a href="#">Add to buddies</a>
+            </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
