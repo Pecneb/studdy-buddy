@@ -15,7 +15,7 @@
                         <label for="input_text">Title</label>
                     </div>
                     <div class="input-field col s6">
-                        <select name="team_size">
+                        <select name="team_size" required>
                             <option value="" disabled selected>Team Size</option>
                             {% for i in range(2,11) %}
                             <option  value="{{ i }}">{{ i }}</option>
@@ -35,7 +35,7 @@
                 <select name="tantargy">
                     <option value="" disabled selected>Select subject</option>
                     {% for tantargy in tantargyak %}
-                    <option  value="{{ tantargy['tkod'] }}">{{ tantargy['tnev'] }}</option>
+                    <option  value="{{ tantargy.id }}">{{ tantargy.name }}</option>
                     {% endfor %}
                 </select>
                 <label>Select subject</label>

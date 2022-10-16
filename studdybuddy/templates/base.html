@@ -14,7 +14,7 @@
     <ul class="right hide-on-med-and-down black-text">
       <li class="row">
         <i class="material-icons col 2" class="material-icons">account_circle</i>
-        <span class="col 10">{{ g.user['firstname'] }} {{ g.user['lastname'] }}</span>
+        <span class="col 10">{{ g.user.firstname }} {{ g.user.lastname }}</span>
       </li>
       <li>
         <a class="black" href="{{ url_for('auth.logout') }}">
@@ -29,7 +29,7 @@
   <li class="row">
     <div class="col s12 center-align">
       <i class="material-icons center-align">account_circle</i>
-      <span>{{ g.user['firstname'] }} {{ g.user['lastname'] }}</span>
+      <span>{{ g.user.firstname }} {{ g.user.lastname }}</span>
     </div>
   </li>
   <li class="row">
@@ -39,7 +39,7 @@
 {% else %}
 <nav style="background-color: #4784a7">
   <div class="nav-wrapper">
-    <a href="{{ url_for('menu.index') }}!" class="brand-logo center">
+    <a href="{{ url_for('auth.login') }}" class="brand-logo center">
       <img src="{{ url_for('static', filename='Studdy_Buddy.png')}}" alt="" />
     </a>
     <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>

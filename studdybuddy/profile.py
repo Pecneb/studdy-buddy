@@ -2,10 +2,10 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
 from studdybuddy.db import DB as db, Student 
-from studdybuddy.db import Subject, Post
 from studdybuddy.auth import login_required
 from sqlalchemy.exc import DBAPIError
 from sqlalchemy import update
+from werkzeug.security import generate_password_hash
 
 bp = Blueprint('profile', __name__, url_prefix='/profile')
 
@@ -51,7 +51,7 @@ def profile():
                     user.email = new_email
                     
                 if new_pswd != '' and new_pswd!=None:
-                    user.password = new_pswd
+                    user.password = generate_password_hash(new_pswd)
                 #region end~~~~~
                 
                 
@@ -63,6 +63,7 @@ def profile():
                 db.session.delete(user)
                 print(db.session.deleted)
                 db.session.commit()
+                g.user = None
                 return render_template('auth/login.html')
             else:
                 flash("POST method failed","error") 
