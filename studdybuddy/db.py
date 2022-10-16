@@ -1,46 +1,58 @@
-import sqlite3
+from datetime import datetime
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import relationship
+from sqlalchemy import ForeignKey
 
-import click
-from flask import current_app, g, Flask
-from flask.cli import with_appcontext
+# Create the extension
+DB = SQLAlchemy()
 
-app = Flask(__name__, instance_relative_config=True)
+# Define Models
+class Student(DB.Model):
+    __tablename__ = "student"
+    neptun = DB.Column(DB.String(6), primary_key=True)
+    firstname = DB.Column(DB.String(255), nullable=False)
+    lastname = DB.Column(DB.String(255), nullable=False)
+    password = DB.Column(DB.String(255), nullable=False)
+    email = DB.Column(DB.String(255), nullable=False)
 
-def get_db():
-    if 'db' not in g:
-        g.db = sqlite3.connect(
-            current_app.config['DATABASE'],
-            detect_types=sqlite3.PARSE_DECLTYPES
-        )
-        g.db.row_factory = sqlite3.Row
+class Post(DB.Model):
+    __tablename__ = "post"
+    id = DB.Column(DB.Integer, autoincrement=True, primary_key=True)
+    student_neptun = DB.Column(DB.String(6), ForeignKey("student.neptun"), nullable=False)
+    subject_id = DB.Column(DB.String(255), ForeignKey("subject.id"), nullable=False)
+    title = DB.Column(DB.String(30), nullable=False)
+    body = DB.Column(DB.String(500), nullable=False)
+    created = DB.Column(DB.DateTime(timezone=True), default=datetime.now())
 
-    return g.db
+class Subject(DB.Model):
+    __tablename__ = "subject"
+    id = DB.Column(DB.String(255), primary_key=True)
+    name = DB.Column(DB.String(255), nullable=False)
 
+class Tutoring(DB.Model):
+    __tablename__ = "tutoring"
+    id = DB.Column(DB.Integer, autoincrement=True, primary_key=True)
+    tutor_neptun = DB.Column(DB.String(6), ForeignKey("student.neptun"), nullable=False)
+    tutoring_name = DB.Column(DB.String(255), nullable=False)
+    subject_id = DB.Column(DB.String(255), ForeignKey("subject.id"), nullable=False)
+    created = DB.Column(DB.DateTime(timezone=True), default=datetime.now())
+    start_datetime = DB.Column(DB.DateTime(timezone=True), default=datetime.now())
+    end_datetime = DB.Column(DB.DateTime(timezone=True), nullable=False)
 
-def close_db(e=None):
-    db = g.pop('db', None)
+class TutoringParticipant(DB.Model):
+    __tablename__ = "tutoring_participant"
+    id = DB.Column(DB.Integer, autoincrement=True, primary_key=True)
+    student_neptun = DB.Column(DB.String(6), ForeignKey("student.neptun"), nullable=False)
+    tutoring_id = DB.Column(DB.Integer, ForeignKey("tutoring.id"), nullable=False)
 
-    if db is not None:
-        db.close()
+class Group(DB.Model):
+    __tablename__ = "group"
+    id = DB.Column(DB.Integer, autoincrement=True, primary_key=True)
+    name = DB.Column(DB.String(255), nullable=False)
+    created = DB.Column(DB.DateTime(timezone=True), default=datetime.now())
 
-
-def init_db():
-    db = get_db()
-
-    with current_app.open_resource('schema.sql') as f:
-        db.executescript(f.read().decode('utf8'))
-        print(app.instance_path + '/studdybuddy.sqlite')
-
-
-
-@click.command('init-db')
-@with_appcontext
-def init_db_command():
-    """Clear existing data and create new tables."""
-    init_db()
-    click.echo('Initialized the database.')
-
-
-def init_app(app):
-    app.teardown_appcontext(close_db)
-    app.cli.add_command(init_db_command)
+class GroupMember(DB.Model):
+    __tablename__ = "group_member"
+    id = DB.Column(DB.Integer, autoincrement=True, primary_key=True)
+    student_neptun = DB.Column(DB.String(6), ForeignKey("student.neptun"), nullable=False)
+    group_id = DB.Column(DB.Integer, ForeignKey("group.id"), nullable=False)
