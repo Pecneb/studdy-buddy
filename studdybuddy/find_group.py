@@ -1,29 +1,24 @@
-import re
-from sqlite3 import Error
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
-from studdybuddy.db import get_db
+from studdybuddy.db import DB as db 
+from studdybuddy.db import Group, Subject, GroupMember
 from studdybuddy.auth import login_required
 import sys
+from sqlalchemy.exc import DBAPIError
 
 bp = Blueprint('findgroup', __name__, url_prefix='/findgroup')
 
 @bp.route('/', methods=('GET', 'POST'))
 @login_required
 def findgroup():
+    csoportok = db.session.execute(
+        db.select(Group)
+    ).scalars()
 
-    db = get_db()
-    csoportok = db.execute(
-        'SELECT * FROM csoport'
-    ).fetchall()
-
-    tantargyak = db.execute(
-        'SELECT * FROM tantargy'
-    ).fetchall()
-
-    # Query classes from db
-    tantargyak = db.execute('SELECT tkod, tnev FROM tantargy').fetchall()
+    tantargyak = db.session.execute(
+        db.select(Subject)
+    ).scalars()
 
     return render_template('find_group/find_group.html', groups=csoportok, tantargyak=tantargyak)
 
@@ -31,18 +26,16 @@ def findgroup():
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required
 def create_group():
-    db = get_db()
-
-    tantargyak = db.execute(
-        'SELECT * FROM tantargy'
-    ).fetchall()
+    tantargyak = db.session.execute(
+        db.select(Subject)
+    ).scalars()
 
     if request.method == 'POST':
         name = request.form['title']
         desc = request.form['description']
         tkod = request.form['tantargy']
         team_size = request.form['team_size']
-        creatorneptun = g.user['neptun']
+        creatorneptun = g.user.neptun
         error = None
 
         print('[*] POSTING TO DB:' + name +', '+ desc +', '+ tkod +', '+ team_size +', '+ creatorneptun, file=sys.stdout)
@@ -60,14 +53,12 @@ def create_group():
                 flash(error)
         else:
             try:
-                db.execute(
-                    'INSERT INTO csoport(name, desc, team_size, creatorneptun, tkod) values(?,?,?,?,?)',
-                    (name, desc, team_size, creatorneptun, tkod)
-                )
-                db.commit()
-            except Error as e:
+                group = Group(name, desc, team_size, creatorneptun, tkod)
+                # TODO: add creator to groupmembers
+                db.session.add(group)
+                db.session.commit()
+            except DBAPIError as e:
                 print(e, file=sys.stdout)
-            pass
-        redirect(url_for('findgroup.findgroup'))
+        return redirect(url_for('findgroup.findgroup'))
 
     return render_template('find_group/create_group.html', tantargyak=tantargyak)

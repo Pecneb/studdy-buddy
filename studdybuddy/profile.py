@@ -63,6 +63,7 @@ def profile():
                 db.session.delete(user)
                 print(db.session.deleted)
                 db.session.commit()
+                g.user = None
                 return render_template('auth/login.html')
             else:
                 flash("POST method failed","error") 

@@ -65,7 +65,6 @@ CREATE TABLE csoport (
   tkod varchar(255) NOT NULL,
 
   FOREIGN KEY(creatorneptun) REFERENCES hallgato(neptun),
-  FOREIGN KEY(tkod) REFERENCES tantargy(tnev),
   FOREIGN KEY(tkod) REFERENCES tantargy(tkod));
 
 CREATE TABLE csoport_tag (
