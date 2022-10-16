@@ -57,5 +57,8 @@ def create_app(test_config=None):
 
     from . import find_partner
     app.register_blueprint(find_partner.bp)
+    
+    from . import profile
+    app.register_blueprint(profile.bp)
 
     return app
