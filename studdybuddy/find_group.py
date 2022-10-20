@@ -12,15 +12,30 @@ bp = Blueprint('findgroup', __name__, url_prefix='/findgroup')
 @bp.route('/', methods=('GET', 'POST'))
 @login_required
 def findgroup():
+    if request.method == 'POST':
+        pass
+    csoportok = db.session.execute(
+        db.select(Group)
+    ).scalars()
+    
+    tantargyak = db.session.execute(
+        db.select(Subject)
+    ).scalars()
+    
+    csoport_letszamok = []
+    for cs in csoportok:
+        csoport_letszamok.append(
+            len(db.session.execute(
+                db.select(GroupMember)
+                .where(GroupMember.group_id == cs.id)
+            ).scalars().all())
+        )
+
     csoportok = db.session.execute(
         db.select(Group)
     ).scalars()
 
-    tantargyak = db.session.execute(
-        db.select(Subject)
-    ).scalars()
-
-    return render_template('find_group/find_group.html', groups=csoportok, tantargyak=tantargyak)
+    return render_template('find_group/find_group.html', groups=csoportok, tantargyak=tantargyak, letszamok=csoport_letszamok)
 
 
 @bp.route('/create', methods=('GET', 'POST'))
@@ -54,8 +69,10 @@ def create_group():
         else:
             try:
                 group = Group(name, desc, team_size, creatorneptun, tkod)
-                # TODO: add creator to groupmembers
                 db.session.add(group)
+                db.session.flush()
+                creator = GroupMember(g.user.neptun, group.id, 1)
+                db.session.add(creator)
                 db.session.commit()
             except DBAPIError as e:
                 print(e, file=sys.stdout)
