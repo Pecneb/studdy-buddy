@@ -13,26 +13,32 @@ bp = Blueprint('findgroup', __name__, url_prefix='/findgroup')
 @bp.route('/', methods=('GET', 'POST'))
 @login_required
 def findgroup():
+    if request.method == 'POST':
+        pass
+    csoportok = db.session.execute(
+        db.select(Group)
+    ).scalars()
+    
+    tantargyak = db.session.execute(
+        db.select(Subject)
+    ).scalars()
+    
+    csoport_letszamok = []
+    for cs in csoportok:
+        csoport_letszamok.append(
+            len(db.session.execute(
+                db.select(GroupMember)
+                .where(GroupMember.group_id == cs.id)
+            ).scalars().all())
+        )
+
     csoportok = db.session.execute(
         db.select(Group)
     ).scalars()
 
-    tantargyak = db.session.execute(
-        db.select(Subject)
-    ).scalars()
 
-    tagok = db.session.execute(
-        db.select(GroupMember)
-    ).scalars()
+    return render_template('find_group/find_group.html', groups=csoportok, tantargyak=tantargyak, letszamok=csoport_letszamok)
 
-
-    csoportletszam = [0,0,0,0,0]
-    for i in tagok:
-        csoportletszam[i.group_id] += 1
-    
-    for y in csoportletszam:
-        print(y, file=sys.stdout)
-    return render_template('find_group/find_group.html', groups=csoportok, tantargyak=tantargyak, tagok=tagok)
 
 
 @bp.route('/create', methods=('GET', 'POST'))
