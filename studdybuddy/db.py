@@ -16,7 +16,7 @@ class Student(DB.Model):
     email = DB.Column(DB.String(255), nullable=False)
 
 class Relations(DB.Model):
-    id = DB.column(DB.Integer, autoincrement=True, primary_key=True)
+    id = DB.Column(DB.Integer, autoincrement=True, primary_key=True)
     neptun1 = DB.Column(DB.String(6), ForeignKey("student.neptun"), nullable=False)
     neptun2 = DB.Column(DB.String(6), ForeignKey("student.neptun"), nullable=False)
 
