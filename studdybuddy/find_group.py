@@ -1,4 +1,3 @@
-from traceback import print_tb
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
@@ -35,7 +34,6 @@ def findgroup():
     csoportok = db.session.execute(
         db.select(Group)
     ).scalars()
-
 
     return render_template('find_group/find_group.html', groups=csoportok, tantargyak=tantargyak, letszamok=csoport_letszamok)
 
@@ -79,8 +77,6 @@ def create_group():
                 db.session.commit()
             except DBAPIError as e:
                 print(e, file=sys.stdout)
-
-
 
         return redirect(url_for('findgroup.findgroup'))
     return render_template('find_group/create_group.html', tantargyak=tantargyak)
