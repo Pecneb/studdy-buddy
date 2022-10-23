@@ -20,9 +20,8 @@
                 <p>Letszam: {{ letszamok[loop.index0 ]}} / {{ group.team_size }}</p>
 
             </div>
-            <div class="card-action">
-                <a href="#">Contact</a>
-                <a href="#">Add to buddies</a>
+            <div class="card-action center">
+                <a href="{{ url_for('findgroup.group_view', id=group.id) }}">Detailed View</a>
             </div>
             </div>
         </div>

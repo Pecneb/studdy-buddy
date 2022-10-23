@@ -2,7 +2,7 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
 from studdybuddy.db import DB as db 
-from studdybuddy.db import Group, Subject, GroupMember
+from studdybuddy.db import Group, Subject, GroupMember, Student 
 from studdybuddy.auth import login_required
 import sys
 from sqlalchemy.exc import DBAPIError
@@ -80,3 +80,20 @@ def create_group():
 
         return redirect(url_for('findgroup.findgroup'))
     return render_template('find_group/create_group.html', tantargyak=tantargyak)
+
+@bp.route('/group/<int:id>', methods=('GET', 'POST'))
+@login_required
+def group_view(id: int):
+    if request.method == 'POST':
+        pass
+
+    group = db.session.execute(
+        db.select(Group)
+        .where(Group.id == id)
+    ).scalar()
+    group_members = db.session.execute(
+        db.select(Student)
+        .where(GroupMember.group_id == id)
+        .where(GroupMember.student_neptun == Student.neptun)
+    ).scalars()
+    return render_template('find_group/view_group.html', group=group, group_members=group_members)
