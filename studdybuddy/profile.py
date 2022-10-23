@@ -1,7 +1,7 @@
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
-from studdybuddy.db import DB as db, Student 
+from studdybuddy.db import DB as db, Student
 from studdybuddy.auth import login_required
 from sqlalchemy.exc import DBAPIError
 from sqlalchemy import update
