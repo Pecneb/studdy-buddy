@@ -11,6 +11,7 @@ bp = Blueprint('findtutoring', __name__, url_prefix='/findtutoring')
 @bp.route('/', methods=('GET', 'POST'))
 @login_required
 def findtutoring():
+    print(request.user)
     if request.method == 'POST':
         print(request.form)
         subject_filter = request.form['subject']
@@ -32,3 +33,14 @@ def findtutoring():
         ).scalars()
     print(tutorings)
     return render_template('tutoring/tutoring.html', tutorings=tutorings, subjects=subjects)
+
+
+@bp.route('/create-tutoring', methods=('GET', 'POST'))
+@login_required
+def create_tutoring():
+    if request.method == 'POST':
+        
+        subject = request.form['subject']
+        start_datetime = request.form['start_datetime']
+        end_datetime = request.form['end_datetime']
+        
