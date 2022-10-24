@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<div class="row">
+    <a style="margin-top: 1%;" class="col s1" href="{{ url_for('findpartner.findpartner') }}"><img width="35%" height="35%" src="{{ url_for('static', filename='back_arrow.png') }}" alt=""></a>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row" style="background-color: #F5F699; border-radius: 10px; margin-top: 10%">
+        <form class="col s12" method="POST">
+            <div class="container">
+                <div class="row">
+                    <div class="input-field col s6">
+                        <input name="title" id="input_text" type="text" data-length="10">
+                        <label for="input_text">Title</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <textarea name="body" id="textarea2" class="materialize-textarea" data-length="120"></textarea>
+                        <label for="textarea2">Textarea</label>
+                    </div>
+                </div>
+            </div>
+            <div class="input-field container">
+                <select name="tantargy">
+                    <option value="" disabled selected>Select subject</option>
+                    {% for tantargy in tantargyak %}
+                    <option  value="{{ tantargy.id }}">{{ tantargy.name }}</option>
+                    {% endfor %}
+                </select>
+                <label>Select subject</label>
+              </div>
+            <div class="row">
+                <button class="btn waves-effect waves-light black col s2 offset-s5" type="submit" name="action">Create
+                    <i class="material-icons right">send</i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

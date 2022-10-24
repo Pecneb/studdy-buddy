@@ -30,5 +30,5 @@ def findtutoring():
             .where(Tutoring.subject_id==filter)
             .order_by(Tutoring.start_datetime)
         ).scalars()
-    print(subjects)
+    print(tutorings)
     return render_template('tutoring/tutoring.html', tutorings=tutorings, subjects=subjects)
