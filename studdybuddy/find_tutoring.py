@@ -12,12 +12,12 @@ bp = Blueprint('findtutoring', __name__, url_prefix='/findtutoring')
 @login_required
 def findtutoring():
     if request.method == 'POST':
-        subject_filter = request.form['tantargy']
+        print(request.form)
+        subject_filter = request.form['subject']
         g.subject_filter = subject_filter
     subjects = db.session.execute(
         db.select(Subject)
     ).scalars()
-    print(subjects.all())
     filter = g.get('subject_filter')
     if filter == 'all' or filter is None:
         tutorings = db.session.execute(
@@ -30,4 +30,5 @@ def findtutoring():
             .where(Tutoring.subject_id==filter)
             .order_by(Tutoring.start_datetime)
         ).scalars()
+    print(subjects)
     return render_template('tutoring/tutoring.html', tutorings=tutorings, subjects=subjects)

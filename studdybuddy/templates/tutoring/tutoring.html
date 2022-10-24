@@ -11,10 +11,10 @@
     <div class="col s5">
         <form method="post" class="col s12 valign-wrapper">
             <div class="input-field col s10">
-                <select name="tantargy">
+                <select name="subject">
                     <option value="all">All</option>
-                    {% for tantargy in tantargyak %}
-                    <option value="{{ tantargy.id }}">{{ tantargy.name }}</option>
+                    {% for subject in subjects %}
+                    <option value="{{ subject.id }}">{{ subject.name }}</option>
                     {% endfor %}
                 </select>
                 <label>Select Class</label>
