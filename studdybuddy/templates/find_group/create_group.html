@@ -1,11 +1,9 @@
 {% extends 'base.html' %}
 
-{% block header %}
-<div class="row">
-    <a style="margin-top: 1%;" class="col s1" href="{{ url_for('findpartner.findpartner') }}"><img width="35%" height="35%" src="{{ url_for('static', filename='back_arrow.png') }}" alt=""></a>
-</div>
-{% endblock %}
+{% block title %}Find Group{% endblock %}
 
+{% block header %}
+{% endblock %}
 {% block content %}
 <div class="container">
     <div class="row" style="background-color: #F5F699; border-radius: 10px; margin-top: 10%">
@@ -16,11 +14,20 @@
                         <input name="title" id="input_text" type="text" data-length="10">
                         <label for="input_text">Title</label>
                     </div>
+                    <div class="input-field col s6">
+                        <select name="team_size" required>
+                            <option value="" disabled selected>Team Size</option>
+                            {% for i in range(2,11) %}
+                            <option  value="{{ i }}">{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                        <label>Select Team Size</label>
+                      </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
-                        <textarea name="body" id="textarea2" class="materialize-textarea" data-length="120"></textarea>
-                        <label for="textarea2">Textarea</label>
+                        <textarea name="description" id="textarea2" class="materialize-textarea" data-length="120"></textarea>
+                        <label for="textarea2">Description</label>
                     </div>
                 </div>
             </div>
@@ -28,7 +35,7 @@
                 <select name="tantargy">
                     <option value="" disabled selected>Select subject</option>
                     {% for tantargy in tantargyak %}
-                    <option  value="{{ tantargy.id }}">{{ tantargy.name }} ({{ tantargy.id }})</option>
+                    <option  value="{{ tantargy.id }}">{{ tantargy.name }}</option>
                     {% endfor %}
                 </select>
                 <label>Select subject</label>
