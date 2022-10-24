@@ -15,6 +15,11 @@ class Student(DB.Model):
     password = DB.Column(DB.String(255), nullable=False)
     email = DB.Column(DB.String(255), nullable=False)
 
+class Relations(DB.Model):
+    id = DB.Column(DB.Integer, autoincrement=True, primary_key=True)
+    neptun1 = DB.Column(DB.String(6), ForeignKey("student.neptun"), nullable=False)
+    neptun2 = DB.Column(DB.String(6), ForeignKey("student.neptun"), nullable=False)
+
 class Post(DB.Model):
     __tablename__ = "post"
     id = DB.Column(DB.Integer, autoincrement=True, primary_key=True)
