@@ -41,5 +41,8 @@ def create_app(test_config=None):
 
     from . import find_partner
     app.register_blueprint(find_partner.bp)
+    
+    from . import find_tutoring
+    app.register_blueprint(find_tutoring.bp)
 
     return app
