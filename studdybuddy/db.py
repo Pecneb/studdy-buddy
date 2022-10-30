@@ -82,3 +82,9 @@ class GroupMember(DB.Model):
         self.student_neptun = student_neptun
         self.group_id = group_id
         self.admin = admin
+
+class GroupPost(DB.Model):
+    __tablename__ = "group_post"
+    id = DB.Column(DB.Integer, autoincrement=True, primary_key=True)
+    group_id = DB.Column(DB.Integer, ForeignKey("group.id"), nullable=False)
+    body = DB.Column(DB.String(500), nullable=False)

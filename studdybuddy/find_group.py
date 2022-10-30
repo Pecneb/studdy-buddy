@@ -84,9 +84,6 @@ def create_group():
 @bp.route('/group/<int:id>', methods=('GET', 'POST'))
 @login_required
 def group_view(id: int):
-    if request.method == 'POST':
-        pass
-
     group = db.session.execute(
         db.select(Group)
         .where(Group.id == id)
@@ -96,4 +93,11 @@ def group_view(id: int):
         .where(GroupMember.group_id == id)
         .where(GroupMember.student_neptun == Student.neptun)
     ).scalars()
+    if request.method == 'POST':
+        if g.user in group_members:
+            #TODO create post
+            pass
+        else:
+            #TODO send message
+            pass
     return render_template('find_group/view_group.html', group=group, group_members=group_members)

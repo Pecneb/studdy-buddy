@@ -11,6 +11,11 @@
 </div>
 {% endblock %}
 {% block content %}
+{% if g.user in group_members %}
+<div>
+    <p>Under construction.</p>
+</div>
+{% else %}
 <div class="container" style="background-color: #F5F699; border-radius: 10px; margin-top: 10%">
     <div class="row center">
         <p class="col s12">{{ group.desc }}</p>
@@ -39,4 +44,5 @@
         </div>
     </div>
 </div>
+{% endif %}
 {% endblock %}
