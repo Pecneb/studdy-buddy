@@ -3,6 +3,9 @@
 {% block title %}Find Group{% endblock %}
 
 {% block header %}
+<div class="row">
+    <a class="col s1 left" href="{{ url_for('findgroup.findgroup') }}"><img width="35%" height="35%" src="{{ url_for('static', filename='back_arrow.png') }}" alt=""></a>
+</div>
 {% endblock %}
 {% block content %}
 <div class="container">

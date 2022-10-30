@@ -3,12 +3,15 @@
 {% block title %}Find Group{% endblock %}
 
 {% block header %}
-<div class="center">
-    <h1>{{ group.name }}</h1>
+<div class="row center">
+    <a class="col s1 left" href="{{ url_for('findgroup.findgroup') }}"><img width="35%" height="35%" src="{{ url_for('static', filename='back_arrow.png') }}" alt=""></a>
+</div>
+<div class="row">
+    <h1 class="col s12 center">{{ group.name }}</h1>
 </div>
 {% endblock %}
 {% block content %}
-<div class="container">
+<div class="container" style="background-color: #F5F699; border-radius: 10px; margin-top: 10%">
     <div class="row center">
         <p class="col s12">{{ group.desc }}</p>
     </div>
@@ -26,6 +29,11 @@
                     <textarea id="icon_prefix2" class="materialize-textarea"></textarea>
                     <label for="icon_prefix2">Message</label>
                     </div>
+                </div>
+                <div class="row center">
+                    <button class="btn waves-effect waves-light black col s2 offset-s5" type="submit" name="action">
+                        Send<i class="material-icons right">send</i>
+                    </button>
                 </div>
             </form>
         </div>
