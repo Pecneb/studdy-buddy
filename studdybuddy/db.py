@@ -39,6 +39,10 @@ class Subject(DB.Model):
     id = DB.Column(DB.String(255), primary_key=True)
     name = DB.Column(DB.String(255), nullable=False)
 
+    def __init__(self, id, name):
+        self.id = id
+        self.name = name
+
 class Tutoring(DB.Model):
     __tablename__ = "tutoring"
     id = DB.Column(DB.Integer, autoincrement=True, primary_key=True)
@@ -83,3 +87,9 @@ class GroupMember(DB.Model):
         self.student_neptun = student_neptun
         self.group_id = group_id
         self.admin = admin
+
+class GroupPost(DB.Model):
+    __tablename__ = "group_post"
+    id = DB.Column(DB.Integer, autoincrement=True, primary_key=True)
+    group_id = DB.Column(DB.Integer, ForeignKey("group.id"), nullable=False)
+    body = DB.Column(DB.String(500), nullable=False)

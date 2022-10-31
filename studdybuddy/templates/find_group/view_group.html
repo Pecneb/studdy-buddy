@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Find Group{% endblock %}
+
+{% block header %}
+<div class="row center">
+    <a class="col s1 left" href="{{ url_for('findgroup.findgroup') }}"><img width="35%" height="35%" src="{{ url_for('static', filename='back_arrow.png') }}" alt=""></a>
+</div>
+<div class="row">
+    <h1 class="col s12 center">{{ group.name }}</h1>
+</div>
+{% endblock %}
+{% block content %}
+{% if g.user in group_members %}
+<div>
+    <p>Under construction.</p>
+</div>
+{% else %}
+<div class="container" style="background-color: #F5F699; border-radius: 10px; margin-top: 10%">
+    <div class="row center">
+        <p class="col s12">{{ group.desc }}</p>
+    </div>
+    <div class="row center">
+        {% for member in group_members %}
+        <p class="col s12">{{ member.firstname }} {{ member.lastname }}</p>
+        {% endfor %}
+    </div>
+    <div>
+        <div class="row">
+            <form class="col s12">
+                <div class="row center">
+                    <div class="input-field col s6 offset-s3">
+                    <i class="material-icons prefix">mode_edit</i>
+                    <textarea id="icon_prefix2" class="materialize-textarea"></textarea>
+                    <label for="icon_prefix2">Message</label>
+                    </div>
+                </div>
+                <div class="row center">
+                    <button class="btn waves-effect waves-light black col s2 offset-s5" type="submit" name="action">
+                        Send<i class="material-icons right">send</i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
