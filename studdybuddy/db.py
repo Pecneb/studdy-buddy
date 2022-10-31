@@ -17,8 +17,13 @@ class Student(DB.Model):
 
 class Relations(DB.Model):
     id = DB.Column(DB.Integer, autoincrement=True, primary_key=True)
-    neptun1 = DB.Column(DB.String(6), ForeignKey("student.neptun"), nullable=False)
-    neptun2 = DB.Column(DB.String(6), ForeignKey("student.neptun"), nullable=False)
+    neptun1 = DB.Column(DB.String(6), ForeignKey(Student.neptun), nullable=False)
+    neptun2 = DB.Column(DB.String(6), ForeignKey(Student.neptun), nullable=False)
+
+class Message:
+    relation = DB.relationship(Relations, back_populates="parent", uselist=False)
+    sender=DB.Column(DB.String(6),ForeignKey(Student.neptun),nullable=False)
+    message=DB.Column(DB.String(200),nullable=False)
 
 class Post(DB.Model):
     __tablename__ = "post"
