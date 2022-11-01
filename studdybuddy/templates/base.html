@@ -13,8 +13,9 @@
     <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
     <ul class="right hide-on-med-and-down black-text">
       <li class="row">
-        <a href="{{url_for('messages.chats'}}">
-        <i class="material-icons col 2" class="material-icons">message</i>
+        <a href="{{url_for('messages.chats')}}">
+          <i class="material-icons col 2 black" class="material-icons">message</i>
+        </a>
       </li>
       <li class="row">
         <i class="material-icons col 2" class="material-icons">account_circle</i>
@@ -31,8 +32,11 @@
 <!--This is for small displays-->
 <ul class="sidenav" style="background-color: #f5f699" id="mobile-demo">
   <li class="row">
-    <i class="material-icons col 2" class="material-icons">message</i>
+    <a href="{{url_for('messages.chats')}}">
+      <i class="material-icons col 2" class="material-icons">message</i>
+    </a>
   </li>
+
   <li class="row">
     <div class="col s12 center-align">
       <i class="material-icons center-align">account_circle</i>

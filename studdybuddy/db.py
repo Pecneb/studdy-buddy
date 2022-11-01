@@ -1,6 +1,5 @@
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import relationship
 from sqlalchemy import ForeignKey
 
 # Create the extension
@@ -19,9 +18,11 @@ class Relations(DB.Model):
     id = DB.Column(DB.Integer, autoincrement=True, primary_key=True)
     neptun1 = DB.Column(DB.String(6), ForeignKey(Student.neptun), nullable=False)
     neptun2 = DB.Column(DB.String(6), ForeignKey(Student.neptun), nullable=False)
+    is_buddies = DB.Column(DB.Boolean, default=False, nullable=False)
 
-class Message:
-    relation = DB.relationship(Relations, back_populates="parent", uselist=False)
+class Message(DB.Model):
+    id = DB.Column(DB.Integer, autoincrement=True, primary_key=True)
+    relation = DB.Column(DB.Integer, ForeignKey(Relations.id), nullable=False)
     sender=DB.Column(DB.String(6),ForeignKey(Student.neptun),nullable=False)
     message=DB.Column(DB.String(200),nullable=False)
 
