@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 <h1>{% block title %}Profile{% endblock %}</h1>
 {%block header%}
-<div class="row">
+<div class="row" style="padding-top: 20px;">
   <div class="col s6">
     <a class="col center" href="{{ url_for('menu.index') }}"
       ><img width="45%" height="45%" src="{{ url_for('static', filename='back_arrow.png') }}" alt=""

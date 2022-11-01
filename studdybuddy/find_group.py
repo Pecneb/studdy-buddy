@@ -2,7 +2,7 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
 from studdybuddy.db import DB as db 
-from studdybuddy.db import Group, Subject, GroupMember, Student 
+from studdybuddy.db import Group, Subject, GroupMember, Student, GroupPost
 from studdybuddy.auth import login_required
 import sys
 from sqlalchemy.exc import DBAPIError
@@ -93,11 +93,33 @@ def group_view(id: int):
         .where(GroupMember.group_id == id)
         .where(GroupMember.student_neptun == Student.neptun)
     ).scalars()
+    group_posts = db.session.execute(
+                db.select(GroupPost)
+                .where(GroupPost.group_id == Group.id)
+    ).scalars()
     if request.method == 'POST':
         if g.user in group_members:
-            #TODO create post
-            pass
+            body = request.form['body']
+            error = None 
+            if body is None:
+                error = "Post must have text in it."
+            if error is None:
+                print(body)
+                post_creator = db.session.execute(
+                    db.select(GroupMember)
+                    .where(GroupMember.group_id == id)
+                    .where(GroupMember.student_neptun == g.user.neptun)
+                ).scalar()
+                post = GroupPost(id, post_creator.id, body)
+                try:
+                    db.session.add(post)
+                    db.session.commit()
+                except DBAPIError as e:
+                    print(e)
+            else:
+                flash(error)
         else:
-            #TODO send message
+            print("The user is not a group member")
             pass
-    return render_template('find_group/view_group.html', group=group, group_members=group_members)
+        return redirect(url_for('findgroup.group_view', id=id))
+    return render_template('find_group/view_group.html', group=group, group_members=group_members, group_posts=group_posts)

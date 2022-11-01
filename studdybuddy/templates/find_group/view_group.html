@@ -3,19 +3,44 @@
 {% block title %}Find Group{% endblock %}
 
 {% block header %}
-<div class="row center">
+<div class="row center" style="padding-top: 20px;">
     <a class="col s1 left" href="{{ url_for('findgroup.findgroup') }}"><img width="35%" height="35%" src="{{ url_for('static', filename='back_arrow.png') }}" alt=""></a>
-</div>
-<div class="row">
-    <h1 class="col s12 center">{{ group.name }}</h1>
 </div>
 {% endblock %}
 {% block content %}
 {% if g.user in group_members %}
-<div>
-    <p>Under construction.</p>
+<div class="container" style="background-color: #f5f699; padding-top: 40px;">
+   <div class="row">
+        <form method="POST" class="col s12">
+            <div class="row center">
+                <div class="input-field col s6 offset-s2">
+                <i class="material-icons prefix">mode_edit</i>
+                <textarea name="body" id="icon_prefix2" class="materialize-textarea"></textarea>
+                <label for="icon_prefix2">Post</label>
+                </div>
+                <button class="btn waves-effect waves-light black col s2" type="submit" name="action">
+                    Send<i class="material-icons right">send</i>
+                </button>
+            </div>
+        </form>
+   </div> 
+   <div class="row">
+        {% for post in group_posts %}
+        <div class="row">
+            <div class="col s8 offset-s2">
+                <div class="card-panel teal">
+                    <h1>{{ post.firstname }} {{ post.lastname }}</h1>
+                    <span class="white-text">
+                        {{ post.body }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+   </div>
 </div>
-{% else %}
+{% elif g.user not in group_members %}
+{{ g.user.firstname }}
 <div class="container" style="background-color: #F5F699; border-radius: 10px; margin-top: 10%">
     <div class="row center">
         <p class="col s12">{{ group.desc }}</p>
@@ -27,7 +52,7 @@
     </div>
     <div>
         <div class="row">
-            <form class="col s12">
+            <form method="POST" class="col s12">
                 <div class="row center">
                     <div class="input-field col s6 offset-s3">
                     <i class="material-icons prefix">mode_edit</i>

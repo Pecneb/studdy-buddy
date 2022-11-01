@@ -86,11 +86,13 @@ class GroupMember(DB.Model):
 class GroupPost(DB.Model):
     __tablename__ = "group_post"
     id = DB.Column(DB.Integer, autoincrement=True, primary_key=True)
+    group_member_id = DB.Column(DB.Integer, ForeignKey("group_member.id"), nullable=False)
     group_id = DB.Column(DB.Integer, ForeignKey("group.id"), nullable=False)
     body = DB.Column(DB.String(500), nullable=False)
 
-    def __init__(self, group_id, body):
+    def __init__(self, group_id, group_member_id, body):
         self.group_id = group_id
+        self.group_member_id = group_member_id
         self.body = body
 
 class GroupRequests(DB.Model):

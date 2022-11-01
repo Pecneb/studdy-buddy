@@ -48,6 +48,7 @@ def create_app(test_config=None):
     admin.add_view(libadmin.TutoringParticipantModelView(db.TutoringParticipant, db.DB.session))
     admin.add_view(libadmin.GroupModelView(db.Group, db.DB.session))
     admin.add_view(libadmin.GroupMemberModelView(db.GroupMember, db.DB.session))
+    admin.add_view(libadmin.GroupPostModelView(db.GroupPost, db.DB.session))
 
     from . import auth
     app.register_blueprint(auth.bp)
