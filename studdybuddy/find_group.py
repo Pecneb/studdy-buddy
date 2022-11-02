@@ -94,7 +94,7 @@ def group_view(id: int):
         .where(GroupMember.student_neptun == Student.neptun)
     ).scalars()
     group_posts = db.session.execute(
-                db.select(GroupPost)
+                db.select(GroupPost, Student)
                 .where(GroupPost.group_id == Group.id)
     ).scalars()
     if request.method == 'POST':
