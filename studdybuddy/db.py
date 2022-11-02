@@ -129,13 +129,15 @@ class GroupPost(DB.Model):
 class GroupRequests(DB.Model):
     __tablename__ = "group_requests"
     id = DB.Column(DB.Integer, autoincrement=True, primary_key=True)
-    group_id = DB.Column(DB.String(6), ForeignKey("group.id"))
+    group_id = DB.Column(DB.Integer, ForeignKey("group.id"), nullable=False)
+    sender = DB.Column(DB.String(6), ForeignKey("student.neptun"), nullable=False)
     message = DB.Column(DB.String(500), nullable=False)
 
     group = relationship(
         "Group", back_populates="group_requests"
     )
 
-    def __init__(self, group_id, message):
+    def __init__(self, group_id, sender_neptun, message):
         self.group_id = group_id
+        self.sneder = sender_neptun
         self.message = message

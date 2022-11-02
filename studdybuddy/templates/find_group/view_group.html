@@ -40,23 +40,25 @@
    </div>
 </div>
 {% elif g.user not in group_members %}
-{{ g.user.firstname }}
-<div class="container" style="background-color: #F5F699; border-radius: 10px; margin-top: 10%">
+<div class="container" style="background-color: #F5F699; border-radius: 10px; padding-top: 20px">
     <div class="row center">
+        <h5>Description:</h5>
         <p class="col s12">{{ group.desc }}</p>
     </div>
     <div class="row center">
+        <h5>Group Members:</h5>
         {% for member in group_members %}
         <p class="col s12">{{ member.firstname }} {{ member.lastname }}</p>
         {% endfor %}
     </div>
     <div>
-        <div class="row">
+        <div class="row center">
+            <h5>Send request to group admins:</h5>
             <form method="POST" class="col s12">
                 <div class="row center">
                     <div class="input-field col s6 offset-s3">
                     <i class="material-icons prefix">mode_edit</i>
-                    <textarea id="icon_prefix2" class="materialize-textarea"></textarea>
+                    <textarea name="request" id="icon_prefix2" class="materialize-textarea"></textarea>
                     <label for="icon_prefix2">Message</label>
                     </div>
                 </div>
