@@ -15,6 +15,10 @@ class Student(DB.Model):
     password = DB.Column(DB.String(255), nullable=False)
     email = DB.Column(DB.String(255), nullable=False)
 
+    group_members = relationship(
+        "GroupMember", back_populates="student", cascade="all, delete-orphan"
+    )
+
 class Relations(DB.Model):
     id = DB.Column(DB.Integer, autoincrement=True, primary_key=True)
     neptun1 = DB.Column(DB.String(6), ForeignKey("student.neptun"), nullable=False)
@@ -88,6 +92,9 @@ class GroupMember(DB.Model):
     group_id = DB.Column(DB.Integer, ForeignKey("group.id"), nullable=False)
     admin = DB.Column(DB.Boolean, default=False, nullable=False)
 
+    student = relationship(
+        "Student", back_populates="group_members"
+    )
     group = relationship(
         "Group", back_populates="group_members"
     )

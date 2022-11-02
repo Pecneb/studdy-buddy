@@ -94,9 +94,15 @@ def group_view(id: int):
         .where(GroupMember.student_neptun == Student.neptun)
     ).scalars()
     group_posts = db.session.execute(
-                db.select(GroupPost, Student)
-                .where(GroupPost.group_id == Group.id)
+        db.select(GroupPost)
+        .join(Group)
+        .where(GroupPost.group_id==group.id)
     ).scalars()
+    group_posters = db.session.execute(
+        db.select(Student)
+        .join(GroupMember.group_posts)
+        .join(GroupMember.student)
+    ).scalars().all()
     if request.method == 'POST':
         if g.user in group_members:
             body = request.form['body']
@@ -122,4 +128,4 @@ def group_view(id: int):
             print("The user is not a group member")
             pass
         return redirect(url_for('findgroup.group_view', id=id))
-    return render_template('find_group/view_group.html', group=group, group_members=group_members, group_posts=group_posts)
+    return render_template('find_group/view_group.html', group=group, group_members=group_members, group_posts=group_posts, group_posters=group_posters)
