@@ -79,7 +79,7 @@ def chat(id: string):
             db.select(Relations).where(  or_(and_(Relations.neptun1 == user.neptun, Relations.neptun2 == id),
                                              and_(Relations.neptun2 == user.neptun, Relations.neptun1 == id)) )
         ).one()[0]
-        
+        print(relation)
         if request.method == "POST":
             if len(request.form['message'])>0:
                 new_msg=Message(sender=user.neptun, message=request.form['message'], relation=relation.id)
@@ -91,7 +91,7 @@ def chat(id: string):
         
         messages=db.session.execute(
             db.select(Message).where(Message.relation == relation.id)
-        ).all()
+        ).scalars().all()
         
         print(messages)
         if len(messages)<=0:
