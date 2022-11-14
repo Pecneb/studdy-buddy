@@ -10,34 +10,82 @@
 {% block content %}
 {% if g.user in group_members %}
 <div class="container" style="background-color: #f5f699; padding-top: 40px;">
-   <div class="row">
-        <form method="POST" class="col s12">
-            <div class="row center">
-                <div class="input-field col s6 offset-s2">
-                <i class="material-icons prefix">mode_edit</i>
-                <textarea name="body" id="icon_prefix2" class="materialize-textarea"></textarea>
-                <label for="icon_prefix2">Post</label>
+    {% if g.user in group_admins %}
+    <div class="row">
+            <form method="POST" class="col s12">
+                <div class="row center">
+                    <div class="input-field col s6 offset-s2">
+                        <i class="material-icons prefix">mode_edit</i>
+                        <textarea name="body" id="icon_prefix2" class="materialize-textarea"></textarea>
+                        <label for="icon_prefix2">Post</label>
+                    </div>
+                    <button class="input-field btn waves-effect waves-light black col s2" type="submit" name="post_submit" id="post_submit">
+                        Send<i class="material-icons right">send</i>
+                    </button>
                 </div>
-                <button class="btn waves-effect waves-light black col s2" type="submit" name="action">
-                    Send<i class="material-icons right">send</i>
-                </button>
-            </div>
-        </form>
-   </div> 
-   <div class="row">
-        {% for post in group_posts %}
-        <div class="row">
-            <div class="col s8 offset-s2">
-                <div class="card-panel teal">
-                    <h5 style="color:white;">{{ group_posters[loop.index0].firstname }} {{ group_posters[loop.index0].lastname }}</h5>
-                    <span class="white-text">
-                        {{ post.body }}
-                    </span>
+            </form>
+    </div> 
+    <div class="row">
+            {% for req in group_requests %}
+            <div class="row">
+                <div class="col s8 offset-s2">
+                        <form method="POST" class="col s12 card-panel teal">
+                            <div class="row">
+                                <div class="input-field col s9 ">
+                                    <h6>Invite request</h6>
+                                    <p>{{ req[1].firstname }} {{ req[1].lastname }}: {{ req[0].message }}</p>
+                                </div>
+                                <button class="input-field btn waves-effect waves-light black col s2 " type="submit" id="invite_submit" name="invite_submit" value="{{ req[0].sender }}">
+                                    Invite<i class="material-icons right">send</i>
+                                </button>
+                            </div>
+                        </form>
                 </div>
             </div>
-        </div>
-        {% endfor %}
-   </div>
+            {% endfor %}
+            {% for post in group_posts %}
+            <div class="row">
+                <div class="col s8 offset-s2">
+                    <div class="card-panel teal">
+                        <h5 style="color:white;">{{ group_posters[loop.index0].firstname }} {{ group_posters[loop.index0].lastname }}</h5>
+                        <span class="white-text">
+                            {{ post.body }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+    </div>
+    {% else %}
+    <div class="row">
+            <form method="POST" class="col s12">
+                <div class="row center">
+                    <div class="input-field col s6 offset-s2">
+                    <i class="material-icons prefix">mode_edit</i>
+                    <textarea name="body" id="icon_prefix2" class="materialize-textarea"></textarea>
+                    <label for="icon_prefix2">Post</label>
+                    </div>
+                    <button class="input-field btn waves-effect waves-light black col s2" type="post_submit" name="post_submit">
+                        Send<i class="material-icons right">send</i>
+                    </button>
+                </div>
+            </form>
+    </div> 
+    <div class="row">
+            {% for post in group_posts %}
+            <div class="row">
+                <div class="col s8 offset-s2">
+                    <div class="card-panel teal">
+                        <h5 style="color:white;">{{ group_posters[loop.index0].firstname }} {{ group_posters[loop.index0].lastname }}</h5>
+                        <span class="white-text">
+                            {{ post.body }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+    </div>
+    {% endif %}
 </div>
 {% elif g.user not in group_members %}
 <div class="container" style="background-color: #F5F699; border-radius: 10px; padding-top: 20px">

@@ -102,26 +102,64 @@ def group_view(id: int):
         .join(GroupMember.group_posts)
         .join(GroupMember.student)
     ).scalars().all()
+    group_admins = db.session.execute(
+        db.select(Student)
+        .join(GroupMember)
+        .where(GroupMember.admin == True)
+    ).scalars()
+    group_requests = db.session.execute(
+        db.select(GroupRequests, Student)
+        .select_from(GroupRequests)
+        .join(Group)
+        .where(GroupRequests.sender == Student.neptun)
+    ).all()
     if request.method == 'POST':
         if g.user in group_members:
-            body = request.form['body']
-            error = None 
-            if body is None:
-                error = "Post must have text in it."
-            if error is None:
-                post_creator = db.session.execute(
-                    db.select(GroupMember)
-                    .where(GroupMember.group_id == id)
-                    .where(GroupMember.student_neptun == g.user.neptun)
+            if "invite_submit" in request.form:
+                neptun = request.form["invite_submit"]
+
+                student_to_add = db.session.execute(
+                    db.select(Student)
+                    .where(Student.neptun == neptun)
                 ).scalar()
-                post = GroupPost(id, post_creator.id, body)
-                try:
-                    db.session.add(post)
+                student_as_groupmember = GroupMember(student_to_add.neptun, group.id, 0)
+                
+                group_request = None
+                for req in group_requests:
+                    print(req)
+                    if req[0].sender == student_to_add.neptun:
+                        group_request = req[0]
+
+                try: 
+                    db.session.add(student_as_groupmember)
+                    db.session.delete(group_request)
                     db.session.commit()
                 except DBAPIError as e:
                     print(e)
-            else:
-                flash(error)
+            if "post_submit" in request.form:
+                body = request.form['body']
+
+                error = None 
+
+                if body is None:
+                    error = "Post must have text in it."
+
+                if error is None:
+                    post_creator = db.session.execute(
+                        db.select(GroupMember)
+                        .where(GroupMember.group_id == id)
+                        .where(GroupMember.student_neptun == g.user.neptun)
+                    ).scalar()
+
+                    post = GroupPost(id, post_creator.id, body)
+
+                    try:
+                        db.session.add(post)
+                        db.session.commit()
+                    except DBAPIError as e:
+                        print(e)
+                else:
+                    flash(error)
         else:
             request_message = request.form['request']
             error = None 
@@ -137,4 +175,7 @@ def group_view(id: int):
             else:
                 flash(error)
         return redirect(url_for('findgroup.group_view', id=id))
-    return render_template('find_group/view_group.html', group=group, group_members=group_members, group_posts=group_posts, group_posters=group_posters)
+    return render_template('find_group/view_group.html', group=group, 
+        group_members=group_members, group_posts=group_posts, group_posters=group_posters, 
+        group_admins=group_admins, group_requests=group_requests
+    )

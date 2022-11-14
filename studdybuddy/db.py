@@ -139,5 +139,5 @@ class GroupRequests(DB.Model):
 
     def __init__(self, group_id, sender_neptun, message):
         self.group_id = group_id
-        self.sneder = sender_neptun
+        self.sender = sender_neptun
         self.message = message
