@@ -1,5 +1,7 @@
 import os
 from flask import Flask, render_template
+from flask_migrate import Migrate
+from flask_bootstrap import Bootstrap
 
 def page_not_found(e):
   return render_template('404.html'), 404
@@ -27,13 +29,18 @@ def create_app(test_config=None):
 
     app.register_error_handler(404, page_not_found)
 
+    Bootstrap(app)
     from . import db
     db.DB.init_app(app)
-    with app.app_context():
-        db.DB.create_all()
+    # with app.app_context():
+    #     db.DB.create_all()
     
+    migrate = Migrate(app, db.DB)
+
     from . import admin as libadmin
-    
+    from flask_admin import Admin
+    admin = Admin(app, name='studdybuddy', template_mode='bootstrap3')
+
     admin.add_view(libadmin.StudentModelView(db.Student, db.DB.session))
     admin.add_view(libadmin.PostModelView(db.Post, db.DB.session))
     admin.add_view(libadmin.SubjectModelView(db.Subject, db.DB.session))

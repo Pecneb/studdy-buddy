@@ -2,19 +2,31 @@
 
 {% block header %}
 <div class="row">
-    <a class="col s1 left" href="{{ url_for('findgroup.findgroup') }}"><img width="35%" height="35%" src="{{ url_for('static', filename='back_arrow.png') }}" alt=""></a>
+    <a style="margin-top: 1%;" class="col s1" href="{{ url_for('findtutoring.findtutoring') }}"><img width="35%" height="35%" src="{{ url_for('static', filename='back_arrow.png') }}" alt=""></a>
 </div>
 {% endblock %}
-
+    
 {% block content %}
+<h4 class="title center-align white-text ">Create tutoring</h4>
 <div class="container">
     <div class="row" style="background-color: #F5F699; border-radius: 10px; margin-top: 10%">
         <form class="col s12" method="POST">
             <div class="container">
                 <div class="row">
                     <div class="input-field col s6">
-                        <input name="title" id="input_text" type="text" data-length="10">
-                        <label for="input_text">Title</label>
+                        <input name="tutoring_name" id="input_text" type="text" data-length="10">
+                        <label for="input_text">Tutoring name</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <select name="subject">
+                            <option value="" disabled selected>Select subject</option>
+                            {% for subject in subjects %}
+                            <option  value="{{ subject.id }}">{{ subject.name }} ({{ subject.id }})</option>
+                            {% endfor %}
+                        </select>
+                        <label>Select subject</label>
                     </div>
                 </div>
                 <div class="row">
@@ -24,21 +36,21 @@
                     </div>
                 </div>
             </div>
-            <div class="input-field container">
-                <select name="tantargy">
-                    <option value="" disabled selected>Select subject</option>
-                    {% for tantargy in tantargyak %}
-                    <option  value="{{ tantargy.id }}">{{ tantargy.name }}</option>
-                    {% endfor %}
-                </select>
-                <label>Select subject</label>
-              </div>
             <div class="row">
-                <button class="btn waves-effect waves-light black col s2 offset-s5" type="submit" name="action">Create
-                    <i class="material-icons right">send</i>
-                </button>
-            </div>
-        </form>
+                <div class="input-field col s6">
+                    <input name="date" id="date" type="text" class="datepicker">
+                    <label for="date">Date</label>
+                </div>
+                <div class="input-field col s6">
+                    
+                </div>
+                <div class="row">
+                    <button class="btn waves-effect waves-light black col s2 offset-s5" type="submit" name="action">Create
+                        <i class="material-icons right">send</i>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div id="dtBox"></div>
     </div>
-</div>
 {% endblock %}

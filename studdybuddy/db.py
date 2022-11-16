@@ -1,12 +1,12 @@
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy import ForeignKey
+from flask_sqlalchemy import SQLAlchemy
 
-# Create the extension
 DB = SQLAlchemy()
 
-# Define Models
 class Student(DB.Model):
     __tablename__ = "student"
     neptun = DB.Column(DB.String(6), primary_key=True)
@@ -44,8 +44,20 @@ class Tutoring(DB.Model):
     tutor_neptun = DB.Column(DB.String(6), ForeignKey("student.neptun"), nullable=False)
     tutoring_name = DB.Column(DB.String(255), nullable=False)
     subject_id = DB.Column(DB.String(255), ForeignKey("subject.id"), nullable=False)
+    created = DB.Column(DB.DateTime(timezone=True), default=datetime.now())
     start_datetime = DB.Column(DB.DateTime(timezone=True), default=datetime.utcnow())
     end_datetime = DB.Column(DB.DateTime(timezone=True), nullable=False)
+    max_participants = DB.Column(DB.Integer, nullable=False)
+
+    @hybrid_property
+    def tutor_name(self):
+        obj = Student.query.filter_by(neptun=self.tutor_neptun).first()
+        return obj.firstname + " " + obj.lastname
+
+    @hybrid_property
+    def subject_name(self):
+        obj = Subject.query.filter_by(id=self.subject_id).first()
+        return obj.name
 
 class TutoringParticipant(DB.Model):
     __tablename__ = "tutoring_participant"
