@@ -31,6 +31,17 @@ def create_app(test_config=None):
     db.DB.init_app(app)
     with app.app_context():
         db.DB.create_all()
+    
+    from . import admin as libadmin
+    
+    admin.add_view(libadmin.StudentModelView(db.Student, db.DB.session))
+    admin.add_view(libadmin.PostModelView(db.Post, db.DB.session))
+    admin.add_view(libadmin.SubjectModelView(db.Subject, db.DB.session))
+    admin.add_view(libadmin.TutoringModelView(db.Tutoring, db.DB.session))
+    admin.add_view(libadmin.TutoringParticipantModelView(db.TutoringParticipant, db.DB.session))
+    admin.add_view(libadmin.GroupModelView(db.Group, db.DB.session))
+    admin.add_view(libadmin.GroupMemberModelView(db.GroupMember, db.DB.session))
+    admin.add_view(libadmin.GroupPostModelView(db.GroupPost, db.DB.session))
 
     from . import auth
     app.register_blueprint(auth.bp)
