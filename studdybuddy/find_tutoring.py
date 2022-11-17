@@ -5,6 +5,7 @@ from studdybuddy.db import DB as db
 from studdybuddy.db import Subject, Tutoring, TutoringParticipant
 from studdybuddy.auth import login_required
 from sqlalchemy.exc import DBAPIError
+from datetime import datetime
 
 bp = Blueprint('findtutoring', __name__, url_prefix='/findtutoring')
 
@@ -49,23 +50,37 @@ def create_tutoring():
     if request.method == 'POST':
             tutor_neptun = g.user.neptun
             tutoring_name = request.form['tutoring_name']
-            subject_id = request.form['subject']
-            start_datetime = request.form['start_datetime']
-            end_datetime = request.form['end_datetime']
-            max_participants = request.form['max_participants']
+            print('tutoring_name', tutoring_name)
+            subject_id = request.form['subject_id']
+            print('subject_id', subject_id)
+            if 'start_datetime' in request.form and request.form['start_datetime'] != '':
+                # start_datetime = datetime.strptime(request.form['start_datetime'], "%Y-%m-%dT%H:%M")
+                start_datetime = request.form['start_datetime']
+            else:
+                start_datetime = None
+            print('start_datetime', start_datetime, type(start_datetime))
 
-            error = error_handler(tutoring_name, subject_id, start_datetime, end_datetime, max_participants)
+            # end_datetime = datetime.strptime(request.form['end_datetime'], "%Y-%m-%dT%H:%M")
+            end_datetime = request.form['end_datetime']
+
+            print('!!!!!!!!end_datetime', end_datetime)
+            max_participants = request.form['max_participants']
+            print('max_participants', max_participants)
+
+            error = error_handler(tutoring_name, subject_id, end_datetime, max_participants)
             if error is not None:
                 flash(error)
             else:
                 try:
                     tutoring = Tutoring(
+                        tutor_neptun=tutor_neptun,
                         tutoring_name = tutoring_name,
                         subject_id = subject_id,
-                        start_datetime = start_datetime,
                         end_datetime = end_datetime,
                         max_participants = max_participants,
                     )
+                    if request.form['start_datetime'] != '':
+                        tutoring.start_datetime = start_datetime
                     db.session.add(tutoring)
                     db.session.commit()
                 except DBAPIError as e:
@@ -77,14 +92,12 @@ def create_tutoring():
     ).scalars()
     return render_template('tutoring/create_tutoring.html', subjects=subjects)
 
-def error_handler(tutoring_name, subject_id, start_datetime, end_datetime, max_participants):
+def error_handler(tutoring_name, subject_id, end_datetime, max_participants):
     error = None
     if tutoring_name is None:
         error = "Tutoring name required."
     elif subject_id is None:
         error = "Subject selection is required."
-    elif start_datetime is None:
-        error = "Start datetime is required."
     elif end_datetime is None:
         error = "End datetime is required."
     elif max_participants is None:

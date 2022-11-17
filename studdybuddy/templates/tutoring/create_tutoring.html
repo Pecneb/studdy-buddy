@@ -13,14 +13,14 @@
         <form class="col s12" method="POST">
             <div class="container">
                 <div class="row">
-                    <div class="input-field col s6">
-                        <input name="tutoring_name" id="input_text" type="text" data-length="10">
+                    <div class="input-field col s12">
+                        <input name="tutoring_name" id="input_text" type="text" data-length="120">
                         <label for="input_text">Tutoring name</label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
-                        <select name="subject">
+                        <select name="subject_id">
                             <option value="" disabled selected>Select subject</option>
                             {% for subject in subjects %}
                             <option  value="{{ subject.id }}">{{ subject.name }} ({{ subject.id }})</option>
@@ -30,20 +30,25 @@
                     </div>
                 </div>
                 <div class="row">
+                    <label>Start date (optional)</label>
                     <div class="input-field col s12">
-                        <textarea name="body" id="textarea2" class="materialize-textarea" data-length="120"></textarea>
-                        <label for="textarea2">Textarea</label>
+                        <input type="datetime-local" name="start_datetime" class="">
+                    </div>
+                </div>
+                <div class="row">
+                    <label>End date</label>
+                    <div class="input-field col s12">
+                        <input type="datetime-local" name="end_datetime">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input type="number" name="max_participants">
+                        <label>Max participants</label>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="input-field col s6">
-                    <input name="date" id="date" type="text" class="datepicker">
-                    <label for="date">Date</label>
-                </div>
-                <div class="input-field col s6">
-                    
-                </div>
                 <div class="row">
                     <button class="btn waves-effect waves-light black col s2 offset-s5" type="submit" name="action">Create
                         <i class="material-icons right">send</i>
@@ -51,6 +56,5 @@
                 </div>
             </form>
         </div>
-        <div id="dtBox"></div>
     </div>
 {% endblock %}
