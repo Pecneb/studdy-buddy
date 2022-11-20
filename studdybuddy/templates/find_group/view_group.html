@@ -3,35 +3,110 @@
 {% block title %}Find Group{% endblock %}
 
 {% block header %}
-<div class="row center">
+<div class="row center" style="padding-top: 20px;">
     <a class="col s1 left" href="{{ url_for('findgroup.findgroup') }}"><img width="35%" height="35%" src="{{ url_for('static', filename='back_arrow.png') }}" alt=""></a>
-</div>
-<div class="row">
-    <h1 class="col s12 center">{{ group.name }}</h1>
 </div>
 {% endblock %}
 {% block content %}
 {% if g.user in group_members %}
-<div>
-    <p>Under construction.</p>
+<div class="container" style="background-color: #f5f699; padding-top: 40px;">
+    {% if g.user in group_admins %}
+    <div class="row">
+            <form method="POST" class="col s12">
+                <div class="row center">
+                    <div class="input-field col s6 offset-s2">
+                        <i class="material-icons prefix">mode_edit</i>
+                        <textarea name="body" id="icon_prefix2" class="materialize-textarea"></textarea>
+                        <label for="icon_prefix2">Post</label>
+                    </div>
+                    <button class="input-field btn waves-effect waves-light black col s2" type="submit" name="post_submit" id="post_submit">
+                        Send<i class="material-icons right">send</i>
+                    </button>
+                </div>
+            </form>
+    </div> 
+    <div class="row">
+            {% for req in group_requests %}
+            <div class="row">
+                <div class="col s8 offset-s2">
+                        <form method="POST" class="col s12 card-panel teal">
+                            <div class="row">
+                                <div class="input-field col s9 ">
+                                    <h6>Invite request</h6>
+                                    <p>{{ req[1].firstname }} {{ req[1].lastname }}: {{ req[0].message }}</p>
+                                </div>
+                                <button class="input-field btn waves-effect waves-light black col s2 " type="submit" id="invite_submit" name="invite_submit" value="{{ req[0].sender }}">
+                                    Invite<i class="material-icons right">send</i>
+                                </button>
+                            </div>
+                        </form>
+                </div>
+            </div>
+            {% endfor %}
+            {% for post in group_posts %}
+            <div class="row">
+                <div class="col s8 offset-s2">
+                    <div class="card-panel teal">
+                        <h5 style="color:white;">{{ group_posters[loop.index0].firstname }} {{ group_posters[loop.index0].lastname }}</h5>
+                        <span class="white-text">
+                            {{ post.body }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+    </div>
+    {% else %}
+    <div class="row">
+            <form method="POST" class="col s12">
+                <div class="row center">
+                    <div class="input-field col s6 offset-s2">
+                    <i class="material-icons prefix">mode_edit</i>
+                    <textarea name="body" id="icon_prefix2" class="materialize-textarea"></textarea>
+                    <label for="icon_prefix2">Post</label>
+                    </div>
+                    <button class="input-field btn waves-effect waves-light black col s2" type="post_submit" name="post_submit">
+                        Send<i class="material-icons right">send</i>
+                    </button>
+                </div>
+            </form>
+    </div> 
+    <div class="row">
+            {% for post in group_posts %}
+            <div class="row">
+                <div class="col s8 offset-s2">
+                    <div class="card-panel teal">
+                        <h5 style="color:white;">{{ group_posters[loop.index0].firstname }} {{ group_posters[loop.index0].lastname }}</h5>
+                        <span class="white-text">
+                            {{ post.body }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+    </div>
+    {% endif %}
 </div>
-{% else %}
-<div class="container" style="background-color: #F5F699; border-radius: 10px; margin-top: 10%">
+{% elif g.user not in group_members %}
+<div class="container" style="background-color: #F5F699; border-radius: 10px; padding-top: 20px">
     <div class="row center">
+        <h5>Description:</h5>
         <p class="col s12">{{ group.desc }}</p>
     </div>
     <div class="row center">
+        <h5>Group Members:</h5>
         {% for member in group_members %}
         <p class="col s12">{{ member.firstname }} {{ member.lastname }}</p>
         {% endfor %}
     </div>
     <div>
-        <div class="row">
-            <form class="col s12">
+        <div class="row center">
+            <h5>Send request to group admins:</h5>
+            <form method="POST" class="col s12">
                 <div class="row center">
                     <div class="input-field col s6 offset-s3">
                     <i class="material-icons prefix">mode_edit</i>
-                    <textarea id="icon_prefix2" class="materialize-textarea"></textarea>
+                    <textarea name="request" id="icon_prefix2" class="materialize-textarea"></textarea>
                     <label for="icon_prefix2">Message</label>
                     </div>
                 </div>

@@ -14,6 +14,10 @@ class Student(DB.Model):
     password = DB.Column(DB.String(255), nullable=False)
     email = DB.Column(DB.String(255), nullable=False)
 
+    group_members = relationship(
+        "GroupMember", back_populates="student", cascade="all, delete-orphan"
+    )
+
 class Relations(DB.Model):
     id = DB.Column(DB.Integer, autoincrement=True, primary_key=True)
     neptun1 = DB.Column(DB.String(6), ForeignKey(Student.neptun), nullable=False)
@@ -70,6 +74,16 @@ class Group(DB.Model):
     subject_id = DB.Column(DB.String(255), ForeignKey("subject.id"), nullable=False)
     created = DB.Column(DB.DateTime(timezone=True), default=datetime.now())
 
+    group_members = relationship(
+        "GroupMember", back_populates="group", cascade="all, delete-orphan" 
+    )
+    group_posts = relationship(
+        "GroupPost", back_populates="group", cascade="all, delete-orphan"
+    ) 
+    group_requests = relationship(
+        "GroupRequests", back_populates="group", cascade="all, delete-orphan"
+    )
+
     def __init__(self, name, desc, team_size, cneptun, sub_id):
         self.name = name
         self.desc = desc
@@ -84,6 +98,16 @@ class GroupMember(DB.Model):
     group_id = DB.Column(DB.Integer, ForeignKey("group.id"), nullable=False)
     admin = DB.Column(DB.Boolean, default=False, nullable=False)
 
+    student = relationship(
+        "Student", back_populates="group_members"
+    )
+    group = relationship(
+        "Group", back_populates="group_members"
+    )
+    group_posts = relationship(
+        "GroupPost", back_populates="member", cascade="all, delete-orphan"
+    )
+
     def __init__(self, student_neptun, group_id, admin=False):
         self.student_neptun = student_neptun
         self.group_id = group_id
@@ -92,5 +116,34 @@ class GroupMember(DB.Model):
 class GroupPost(DB.Model):
     __tablename__ = "group_post"
     id = DB.Column(DB.Integer, autoincrement=True, primary_key=True)
+    group_member_id = DB.Column(DB.Integer, ForeignKey("group_member.id"), nullable=False)
     group_id = DB.Column(DB.Integer, ForeignKey("group.id"), nullable=False)
     body = DB.Column(DB.String(500), nullable=False)
+
+    group = relationship(
+        "Group", back_populates="group_posts"
+    )
+    member = relationship(
+        "GroupMember", back_populates="group_posts"
+    )
+
+    def __init__(self, group_id, group_member_id, body):
+        self.group_id = group_id
+        self.group_member_id = group_member_id
+        self.body = body
+
+class GroupRequests(DB.Model):
+    __tablename__ = "group_requests"
+    id = DB.Column(DB.Integer, autoincrement=True, primary_key=True)
+    group_id = DB.Column(DB.Integer, ForeignKey("group.id"), nullable=False)
+    sender = DB.Column(DB.String(6), ForeignKey("student.neptun"), nullable=False)
+    message = DB.Column(DB.String(500), nullable=False)
+
+    group = relationship(
+        "Group", back_populates="group_requests"
+    )
+
+    def __init__(self, group_id, sender_neptun, message):
+        self.group_id = group_id
+        self.sender = sender_neptun
+        self.message = message

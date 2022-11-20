@@ -23,3 +23,6 @@ class GroupModelView(Base):
 
 class GroupMemberModelView(Base):
     form_columns = ('id', 'student_neptun', 'group_id')
+
+class GroupPostModelView(Base):
+    form_columns = ('group_id', 'group_member_id', 'body')
