@@ -1,42 +1,36 @@
-from sqlite3 import Error
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
-from studdybuddy.db import get_db
+from studdybuddy.db import DB as db 
+from studdybuddy.db import Subject, Post
 from studdybuddy.auth import login_required
+from sqlalchemy.exc import DBAPIError
 
 bp = Blueprint('findpartner', __name__, url_prefix='/findpartner')
 
 @bp.route('/', methods=('GET', 'POST'))
 @login_required
 def findpartner():
-    db = get_db()
     if request.method == 'POST':
         tfilter = request.form['tantargy']
         g.tfilter = tfilter
     # Query classes from db
-    tantargyak = db.execute(
-        'SELECT tkod, tnev FROM tantargy'
-    ).fetchall()
+    tantargyak = db.session.execute(
+        db.select(Subject)
+    ).scalars()
     # Query posts from db
     filt = g.get('tfilter')
-    if filt is not None:
-        posts = db.execute(
-            'SELECT p.title, p.body, strftime("%Y-%m-%d %H:%M:%S", p.created) "created", h.firstname + ' ' + h.lastname as "hallgatonev", t.tnev' 
-            ' FROM post p JOIN hallgato h ON p.hallgatoneptun = h.neptun'
-            ' JOIN tantargy t ON t.tkod = p.tkod'
-            ' WHERE p.tkod=?'
-            ' ORDER BY created DESC',
-            (filt,)
-        ).fetchall()
+    if filt == 'all' or filt is None:
+        posts = db.session.execute(
+            db.select(Post)
+            .order_by(Post.created)
+        ).scalars()
     else:
-        posts = db.execute(
-            'SELECT p.title, p.body, strftime("%Y-%m-%d %H:%M:%S", p.created) "created", h.firstname + ' ' + h.lastname as "hallgatonev", t.tnev' 
-            ' FROM post p JOIN hallgato h ON p.hallgatoneptun = h.neptun'
-            ' JOIN tantargy t ON t.tkod = p.tkod'
-            ' ORDER BY created DESC',
-        ).fetchall()
-    g.tfilter = None
+        posts = db.session.execute(
+            db.select(Post)
+            .where(Post.subject_id==filt)
+            .order_by(Post.created)
+        ).scalars()
     return render_template('find_partner/find_partner.html', posts=posts, tantargyak=tantargyak)
 
 @bp.route('/create', methods=('GET', 'POST'))
@@ -46,7 +40,7 @@ def create_post():
         title = request.form['title']
         body = request.form['body']
         tkod = request.form['tantargy']
-        hallgato = g.user['neptun']
+        hallgato = g.user.neptun
         error = None
 
         if title is None:
@@ -57,22 +51,22 @@ def create_post():
             error = "Subject selection is required."
 
         if error is not None:
-            flash(error)
+            flash(error,"error")
         else:
-            db = get_db()
             try:
-                db.execute(
-                    'INSERT INTO post(hallgatoneptun,tkod,title,body) values(?,?,?,?)',
-                    (hallgato, tkod, title, body,)
+                post = Post(
+                    student_neptun=hallgato,
+                    subject_id=tkod,
+                    title=title,
+                    body=body
                 )
-                db.commit()
-            except Error as e:
+                db.session.add(post)
+                db.session.commit()
+            except DBAPIError as e:
                 print(e)
-            pass
-        redirect(url_for('findpartner.findpartner'))
+        return redirect(url_for('.findpartner'))
 
-    db = get_db()
-    tantargyak = db.execute(
-        'SELECT * FROM tantargy'
-    ).fetchall()
+    tantargyak = db.session.execute(
+        db.select(Subject)
+    ).scalars()
     return render_template('find_partner/create_post.html', tantargyak=tantargyak)

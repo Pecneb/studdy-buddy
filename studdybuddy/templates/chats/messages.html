@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+<h1>{% block title %}Messages{% endblock %}</h1>
+{%block header%}
+<div class="row">
+  <div class="col s6">
+    <a class="col center" href="{{ url_for('messages.chats') }}"
+      ><img width="45%" height="45%" src="{{ url_for('static', filename='back_arrow.png') }}" alt=""
+    /></a>
+  </div>
+</div>
+{%endblock%} {% block content %}
+<div class="col s4 center">
+  <div class="row">
+    <div class="col s4 offset-s4">
+      <h5>{{partner.firstname}} {{partner.lastname}}</h5>
+    </div>
+    <div class="container" style="overflow: auto; height: 65vh; scroll-behavior: smooth; flex-direction: column-reverse; scrollbar-width: thin;">
+      {% for message in messages%} {%if message.sender == g.user.neptun%}
+      <div class="col s6 offset-s4 container">
+        <div
+          class="right-align"
+          style="
+            float: right;
+            width: fit-content;
+            max-width: 30vw;
+            height: fit-content;
+            margin: 5px;
+            padding: 5px;
+            word-break: break-word;
+            border-radius: 10px;
+            background-color: #587398;
+            color: white;
+          "
+        >
+          {{message.message}}
+          <div style="font-size: 10px; color: white">{{message.creationtime}}</div>
+        </div>
+      </div>
+      {%else%}
+      <div class="col s6 offset-s1 container">
+        <div
+          class="left-align item"
+          style="
+            float: left;
+            width: fit-content;
+            max-width: 30vw;
+            height: fit-content;
+            margin: 5px;
+            padding: 5px;
+            word-break: break-word;
+            border-radius: 10px;
+            background-color: #587398;
+            color: white;
+          "
+        >
+          {{message.message}}
+          <div style="font-size: 10px; color: white">{{message.creationtime}}</div>
+        </div>
+      </div>
+      {%endif%}{%endfor%}
+    </div>
+    <form method="POST">
+      <div class="row" style="align-items: center">
+        <div class="input-field col s5 offset-s3">
+          <input name="message" id="message" value="" type="text" class="validate" style="color: white" />
+          <label for="message">Message</label>
+        </div>
+        <button class="btn waves-effect waves-light input-field col s1" type="submit" name="action">
+          Send
+          <i class="material-icons right">send</i>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

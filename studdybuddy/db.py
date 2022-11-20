@@ -1,42 +1,151 @@
-import sqlite3
+from datetime import datetime
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import relationship
 
-import click
-from flask import current_app, g
-from flask.cli import with_appcontext
+# Create the extension
+DB = SQLAlchemy()
 
-def get_db():
-    if 'db' not in g:
-        g.db = sqlite3.connect(
-            current_app.config['DATABASE'],
-            detect_types=sqlite3.PARSE_DECLTYPES
-        )
-        g.db.row_factory = sqlite3.Row
+# Define Models
+class Student(DB.Model):
+    __tablename__ = "student"
+    neptun = DB.Column(DB.String(6), primary_key=True)
+    firstname = DB.Column(DB.String(255), nullable=False)
+    lastname = DB.Column(DB.String(255), nullable=False)
+    password = DB.Column(DB.String(255), nullable=False)
+    email = DB.Column(DB.String(255), nullable=False)
 
-    return g.db
+    group_members = relationship(
+        "GroupMember", back_populates="student", cascade="all, delete-orphan"
+    )
 
+class Relations(DB.Model):
+    id = DB.Column(DB.Integer, autoincrement=True, primary_key=True)
+    neptun1 = DB.Column(DB.String(6), ForeignKey(Student.neptun), nullable=False)
+    neptun2 = DB.Column(DB.String(6), ForeignKey(Student.neptun), nullable=False)
+    is_buddies = DB.Column(DB.Boolean, default=False, nullable=False)
 
-def close_db(e=None):
-    db = g.pop('db', None)
+class Message(DB.Model):
+    id = DB.Column(DB.Integer, autoincrement=True, primary_key=True)
+    relation = DB.Column(DB.Integer, ForeignKey(Relations.id), nullable=False)
+    sender=DB.Column(DB.String(6),ForeignKey(Student.neptun),nullable=False)
+    message=DB.Column(DB.String(200),nullable=False)
+    creationtime = DB.Column(DB.DateTime(timezone=True), default=datetime.now())
 
-    if db is not None:
-        db.close()
+class Post(DB.Model):
+    __tablename__ = "post"
+    id = DB.Column(DB.Integer, autoincrement=True, primary_key=True)
+    student_neptun = DB.Column(DB.String(6), ForeignKey("student.neptun"), nullable=False)
+    subject_id = DB.Column(DB.String(255), ForeignKey("subject.id"), nullable=False)
+    title = DB.Column(DB.String(30), nullable=False)
+    body = DB.Column(DB.String(500), nullable=False)
+    created = DB.Column(DB.DateTime(timezone=True), default=datetime.now())
 
+class Subject(DB.Model):
+    __tablename__ = "subject"
+    id = DB.Column(DB.String(255), primary_key=True)
+    name = DB.Column(DB.String(255), nullable=False)
 
-def init_db():
-    db = get_db()
+    def __init__(self, id, name):
+        self.id = id
+        self.name = name
 
-    with current_app.open_resource('schema.sql') as f:
-        db.executescript(f.read().decode('utf8'))
+class Tutoring(DB.Model):
+    __tablename__ = "tutoring"
+    id = DB.Column(DB.Integer, autoincrement=True, primary_key=True)
+    tutor_neptun = DB.Column(DB.String(6), ForeignKey("student.neptun"), nullable=False)
+    tutoring_name = DB.Column(DB.String(255), nullable=False)
+    subject_id = DB.Column(DB.String(255), ForeignKey("subject.id"), nullable=False)
+    created = DB.Column(DB.DateTime(timezone=True), default=datetime.now())
+    start_datetime = DB.Column(DB.DateTime(timezone=True), default=datetime.now())
+    end_datetime = DB.Column(DB.DateTime(timezone=True), nullable=False)
 
+class TutoringParticipant(DB.Model):
+    __tablename__ = "tutoring_participant"
+    id = DB.Column(DB.Integer, autoincrement=True, primary_key=True)
+    student_neptun = DB.Column(DB.String(6), ForeignKey("student.neptun"), nullable=False)
+    tutoring_id = DB.Column(DB.Integer, ForeignKey("tutoring.id"), nullable=False)
 
-@click.command('init-db')
-@with_appcontext
-def init_db_command():
-    """Clear existing data and create new tables."""
-    init_db()
-    click.echo('Initialized the database.')
+class Group(DB.Model):
+    __tablename__ = "group"
+    id = DB.Column(DB.Integer, autoincrement=True, primary_key=True)
+    name = DB.Column(DB.String(255), nullable=False)
+    desc = DB.Column(DB.String(500), nullable=False)
+    team_size = DB.Column(DB.Integer, nullable=False)
+    creator_neptun = DB.Column(DB.String(6), ForeignKey("student.neptun"), nullable=False)
+    subject_id = DB.Column(DB.String(255), ForeignKey("subject.id"), nullable=False)
+    created = DB.Column(DB.DateTime(timezone=True), default=datetime.now())
 
+    group_members = relationship(
+        "GroupMember", back_populates="group", cascade="all, delete-orphan" 
+    )
+    group_posts = relationship(
+        "GroupPost", back_populates="group", cascade="all, delete-orphan"
+    ) 
+    group_requests = relationship(
+        "GroupRequests", back_populates="group", cascade="all, delete-orphan"
+    )
 
-def init_app(app):
-    app.teardown_appcontext(close_db)
-    app.cli.add_command(init_db_command)
+    def __init__(self, name, desc, team_size, cneptun, sub_id):
+        self.name = name
+        self.desc = desc
+        self.team_size = team_size
+        self.creator_neptun = cneptun
+        self.subject_id = sub_id
+
+class GroupMember(DB.Model):
+    __tablename__ = "group_member"
+    id = DB.Column(DB.Integer, autoincrement=True, primary_key=True)
+    student_neptun = DB.Column(DB.String(6), ForeignKey("student.neptun"), nullable=False)
+    group_id = DB.Column(DB.Integer, ForeignKey("group.id"), nullable=False)
+    admin = DB.Column(DB.Boolean, default=False, nullable=False)
+
+    student = relationship(
+        "Student", back_populates="group_members"
+    )
+    group = relationship(
+        "Group", back_populates="group_members"
+    )
+    group_posts = relationship(
+        "GroupPost", back_populates="member", cascade="all, delete-orphan"
+    )
+
+    def __init__(self, student_neptun, group_id, admin=False):
+        self.student_neptun = student_neptun
+        self.group_id = group_id
+        self.admin = admin
+
+class GroupPost(DB.Model):
+    __tablename__ = "group_post"
+    id = DB.Column(DB.Integer, autoincrement=True, primary_key=True)
+    group_member_id = DB.Column(DB.Integer, ForeignKey("group_member.id"), nullable=False)
+    group_id = DB.Column(DB.Integer, ForeignKey("group.id"), nullable=False)
+    body = DB.Column(DB.String(500), nullable=False)
+
+    group = relationship(
+        "Group", back_populates="group_posts"
+    )
+    member = relationship(
+        "GroupMember", back_populates="group_posts"
+    )
+
+    def __init__(self, group_id, group_member_id, body):
+        self.group_id = group_id
+        self.group_member_id = group_member_id
+        self.body = body
+
+class GroupRequests(DB.Model):
+    __tablename__ = "group_requests"
+    id = DB.Column(DB.Integer, autoincrement=True, primary_key=True)
+    group_id = DB.Column(DB.Integer, ForeignKey("group.id"), nullable=False)
+    sender = DB.Column(DB.String(6), ForeignKey("student.neptun"), nullable=False)
+    message = DB.Column(DB.String(500), nullable=False)
+
+    group = relationship(
+        "Group", back_populates="group_requests"
+    )
+
+    def __init__(self, group_id, sender_neptun, message):
+        self.group_id = group_id
+        self.sender = sender_neptun
+        self.message = message

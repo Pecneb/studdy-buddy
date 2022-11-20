@@ -2,7 +2,6 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
 
-from studdybuddy.db import get_db
 from studdybuddy.auth import login_required
 
 bp = Blueprint('menu', __name__)

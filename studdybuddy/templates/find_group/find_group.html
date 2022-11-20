@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Find Group{% endblock %}
+
+{% block header %}
+<div class="row" style="padding: 20px;">
+    <a class="col s1 left" href="{{ url_for('menu.index') }}"><img width="35%" height="35%" src="{{ url_for('static', filename='back_arrow.png') }}" alt=""></a>
+    <div class="valign-wrapper">
+        <a class="waves-effect waves-light btn black col s2" href="{{ url_for('findgroup.create_group') }}">Create Group</a>
+    </div>
+</div>
+{% endblock %}
+{% block content %}
+<div class="row" style="padding: 3%">
+    {% for group in groups %}
+    <div>
+        <div class="col s4">
+            <div class="card blue-grey darken-1">
+            <div class="card-content white-text">
+                <span class="card-title">{{ group.name }}</span>
+                <p>{{ group.desc }}</p>
+                <p>Letszam: {{ letszamok[loop.index0 ]}} / {{ group.team_size }}</p>
+            </div>
+            <div class="card-action center">
+                <a href="{{ url_for('findgroup.group_view', id=group.id) }}">Detailed View</a>
+            </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

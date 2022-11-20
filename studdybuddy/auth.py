@@ -5,7 +5,9 @@ from flask import (
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from studdybuddy.db import get_db
+from studdybuddy.db import DB as db
+from studdybuddy.db import Student
+from sqlalchemy.exc import DBAPIError
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -18,8 +20,6 @@ def register():
         password = request.form['password']
         email = request.form['email']
         
-        db = get_db()
-        
         error = None
 
         if not neptun:
@@ -31,17 +31,21 @@ def register():
 
         if error is None:
             try:
-                db.execute(
-                    "INSERT INTO hallgato (neptun, firstname, lastname, email, password) VALUES (?, ?, ?, ?, ?)",
-                    (neptun, firstname, lastname, email, generate_password_hash(password)),
+                user = Student(
+                    neptun = neptun,
+                    firstname = firstname,
+                    lastname = lastname,
+                    password = generate_password_hash(password),
+                    email = email
                 )
-                db.commit()
-            except db.IntegrityError:
+                db.session.add(user)
+                db.session.commit()
+            except DBAPIError:
                 error = f"User with {neptun} neptun-code is already registered."
             else:
                 return redirect(url_for("auth.login"))
         
-        flash(error)
+        flash(error,"error")
 
     return render_template('auth/register.html')
 
@@ -52,29 +56,26 @@ def login():
         neptun = request.form['neptun']
         password = request.form['password']
         
-        db = get_db()
-        
         error = None
         
-        user = db.execute(
-            'SELECT * FROM hallgato WHERE neptun = ?', (neptun,)
-        ).fetchone()
+        user = db.session.execute(
+            db.select(Student)
+            .where(Student.neptun == neptun)
+        ).scalar()
 
         if user is None:
             error = 'Incorrect neptun-code.'
-        elif not check_password_hash(user['password'], password):
+        elif not check_password_hash(user.password, password):
             error = 'Incorrect password.'
 
         if error is None:
             session.clear()
-            session['neptun'] = user['neptun']
+            session['neptun'] = user.neptun
             return redirect(url_for('menu.index'))
 
-        flash(error)
+        flash(error,"error")
 
     return render_template('auth/login.html')
-
-
 
 @bp.before_app_request
 def load_logged_in_user():
@@ -83,9 +84,7 @@ def load_logged_in_user():
     if neptun is None:
         g.user = None
     else:
-        g.user = get_db().execute(
-            'SELECT * FROM hallgato WHERE neptun = ?', (neptun,)
-        ).fetchone()
+        g.user = db.session.execute(db.select(Student).where(Student.neptun==neptun)).scalar()
 
 
 @bp.route('/logout')
