@@ -16,7 +16,7 @@
     </div>
     <div class="container" style="overflow: auto; height: 65vh; scroll-behavior: smooth; flex-direction: column-reverse; scrollbar-width: thin;">
       {% for message in messages%} {%if message.sender == g.user.neptun%}
-      <div class="col s6 offset-s6 container">
+      <div class="col s6 offset-s4 container">
         <div
           class="right-align"
           style="
@@ -37,7 +37,7 @@
         </div>
       </div>
       {%else%}
-      <div class="col s6 offset-s3 container">
+      <div class="col s6 offset-s1 container">
         <div
           class="left-align item"
           style="
@@ -61,7 +61,7 @@
     </div>
     <form method="POST">
       <div class="row" style="align-items: center">
-        <div class="input-field col s5 offset-s4">
+        <div class="input-field col s5 offset-s3">
           <input name="message" id="message" value="" type="text" class="validate" style="color: white" />
           <label for="message">Message</label>
         </div>
