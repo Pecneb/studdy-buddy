@@ -2,6 +2,7 @@ from email import message
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
+from datetime import datetime
 from studdybuddy.auth import login_required
 from sqlalchemy.exc import DBAPIError
 from sqlalchemy import or_, and_
@@ -88,18 +89,24 @@ def chat(id: string):
 
         
         resp_messages=None
-        
-        messages=db.session.execute(
-            db.select(Message).where(Message.relation == relation.id)
-        ).scalars().all()
-        
-        print(messages)
-        if len(messages)<=0:
-            resp_messages=[{'message':"No messages yet."}]
-        else:
-            resp_messages=messages
-        
-        return render_template('chats/messages.html',messages=resp_messages, partner=partner)
+        with db.session.no_autoflush:
+            messages=db.session.execute(
+                db.select(Message).where(Message.relation == relation.id)
+            ).scalars().all()
+            time=None
+            for message in messages:
+                if datetime.now().date() == message.creationtime.date():
+                    time=str(message.creationtime.hour)+":"+str(message.creationtime.minute)
+                else:
+                    time=str(message.creationtime.year)+". "+str(message.creationtime.month)+". "+str(message.creationtime.day)+". "+str(message.creationtime.hour)+":"+str(message.creationtime.minute)
+                message.creationtime=time
+            print(messages)
+            if len(messages)<=0:
+                resp_messages=[{'message':"No messages yet."}]
+            else:
+                resp_messages=messages
+            
+            return render_template('chats/messages.html',messages=resp_messages, partner=partner)
     
     except DBAPIError as e:
         flash(e,"error")

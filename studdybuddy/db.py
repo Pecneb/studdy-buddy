@@ -1,6 +1,7 @@
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import ForeignKey
+from sqlalchemy.orm import relationship
 
 # Create the extension
 DB = SQLAlchemy()
@@ -29,6 +30,7 @@ class Message(DB.Model):
     relation = DB.Column(DB.Integer, ForeignKey(Relations.id), nullable=False)
     sender=DB.Column(DB.String(6),ForeignKey(Student.neptun),nullable=False)
     message=DB.Column(DB.String(200),nullable=False)
+    creationtime = DB.Column(DB.DateTime(timezone=True), default=datetime.now())
 
 class Post(DB.Model):
     __tablename__ = "post"
