@@ -77,8 +77,6 @@ def login():
 
     return render_template('auth/login.html')
 
-
-
 @bp.before_app_request
 def load_logged_in_user():
     neptun = session.get('neptun')
