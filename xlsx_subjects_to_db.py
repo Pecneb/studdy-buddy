@@ -10,10 +10,10 @@ def main():
     with Session(engine) as session:
         for i in range(len(subjects)):
             try:
-                subject = Subject(subjects.iloc[i, 1], subjects.iloc[i, 0])
+                subject = Subject(id=subjects.iloc[i, 1], name=subjects.iloc[i, 0])
                 session.add(subject)
                 session.flush()
-            except:
+            except Exception as e:
                 continue
         session.commit()
 

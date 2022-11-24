@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<div class="row">
+    <a style="margin-top: 1%;" class="col s1" href="{{ url_for('findtutoring.findtutoring') }}"><img width="35%"
+            height="35%" src="{{ url_for('static', filename='back_arrow.png') }}" alt=""></a>
+</div>
+{% endblock %}
+
+{% block content %}
+<h4 class="title center-align white-text ">Create tutoring</h4>
+<div class="container">
+    <div class="row" style="background-color: #F5F699; border-radius: 10px; margin-top: 10%">
+        <form class="col s12" method="POST">
+            <div class="container">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input name="tutoring_name" id="input_text" type="text" data-length="120" required>
+                        <label for="input_text">Tutoring name</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <select name="subject_id" required>
+                            <option value="" disabled selected>Select subject</option>
+                            {% for subject in subjects %}
+                            <option value="{{ subject.id }}">{{ subject.name }} ({{ subject.id }})</option>
+                            {% endfor %}
+                        </select>
+                        <label>Select subject</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <label>Start date (optional)</label>
+                    <div class="input-field col s12">
+                        <input type="datetime-local" name="start_datetime" class="">
+                    </div>
+                </div>
+                <div class="row">
+                    <label>End date</label>
+                    <div class="input-field col s12">
+                        <input type="datetime-local" name="end_datetime" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input type="number" name="max_participants" required>
+                        <label>Max participants</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="row">
+                    <button class="btn waves-effect waves-light black col s2 offset-s5" type="submit"
+                        name="action">Create
+                        <i class="material-icons right">send</i>
+                    </button>
+                </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

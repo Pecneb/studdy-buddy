@@ -15,8 +15,6 @@ CREATE TABLE hallgato (
   password varchar(255) NOT NULL, 
   PRIMARY KEY (neptun));
 
-INSERT INTO hallgato VALUES('T4MHRR','Akos','Toth','test@gmail.com','pbkdf2:sha256:260000$YOalNw6Vp4LRwh69$a724fe5ac48f35cc6713761c0b3d183f9ac7849cef7002aa1180e7345867a89a');
-
 CREATE TABLE tanulotars (
   hallgatoneptun  varchar(6) NOT NULL, 
   hallgatoneptun2 varchar(6) NOT NULL, 
@@ -33,13 +31,10 @@ CREATE TABLE post (
   FOREIGN KEY(hallgatoneptun) REFERENCES hallgato(neptun),
   FOREIGN KEY(tkod) REFERENCES tantargy(tkod));
 
-INSERT INTO post VALUES(1,'T4MHRR','KGNB_GETM018','Test','Ez egy test group','2022-10-07 12:39:47');
-
 CREATE TABLE tantargy (
   tkod varchar(255) NOT NULL, 
   tnev varchar(255) NOT NULL, 
   PRIMARY KEY (tkod));
-INSERT INTO tantargy VALUES('KGNB_GETM018','Kontrolling');
 
 CREATE TABLE korrepetalas (
   id                INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
@@ -57,15 +52,7 @@ CREATE TABLE korrepetalas_resztvevo (
 
 CREATE TABLE csoport (
   id   INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
-  name varchar(255) NOT NULL,
-  desc varchar(255) NOT NULL,
-  team_size tinyint(1) NOT NULL,
-
-  creatorneptun varchar(6) NOT NULL,
-  tkod varchar(255) NOT NULL,
-
-  FOREIGN KEY(creatorneptun) REFERENCES hallgato(neptun),
-  FOREIGN KEY(tkod) REFERENCES tantargy(tkod));
+  name varchar(255));
 
 CREATE TABLE csoport_tag (
   hallgatoneptun varchar(6) NOT NULL, 
@@ -73,3 +60,4 @@ CREATE TABLE csoport_tag (
   admin          integer(1) NOT NULL,
   FOREIGN KEY(hallgatoneptun) REFERENCES hallgato(neptun), 
   FOREIGN KEY(csoportid) REFERENCES csoport(id));
+
