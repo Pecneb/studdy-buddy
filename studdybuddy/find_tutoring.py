@@ -26,7 +26,7 @@ def findtutoring():
             if tutoring is not None:
                 db.session.delete(tutoring)
                 db.session.commit()
-                flash('Tutoring was deleted!', 'info')
+                flash('Tutoring was deleted!', 'success')
         if 'tutoring_to_apply' in request.form:
             tutoring_to_apply = request.form['tutoring_to_apply']
             tutoring = Tutoring.query.filter_by(id=tutoring_to_apply).first()
@@ -37,7 +37,7 @@ def findtutoring():
                 ).first() is None:
                     db.session.add(TutoringParticipant(student_neptun=g.user.neptun,tutoring_id=tutoring.id,))
                     db.session.commit()
-                    flash('Application was successfull!', 'info')
+                    flash('Application was successfull!', 'success')
                 else:
                     flash('Already applied!', 'error')
     subjects = db.session.execute(db.select(Subject)).scalars()

@@ -33,13 +33,6 @@
 {% endblock %}
 {% block content %}
 <div>
-    {% with messages=get_flashed_messages(with_categories=true) %}
-    {% for category, message in messages %}
-    <div class='alert alert-{{category}} text-center alert-dismissible fade show m-auto'>
-        {{ message }}
-    </div>
-    {% endfor %}
-    {% endwith %}
     <div class="row">
         {% for tutoring in tutorings %}
         <div>
