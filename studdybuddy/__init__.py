@@ -69,4 +69,7 @@ def create_app(test_config=None):
     from . import messages
     app.register_blueprint(messages.bp)
 
+    from . import profile
+    app.register_blueprint(profile.bp)
+
     return app
