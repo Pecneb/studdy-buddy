@@ -78,6 +78,7 @@ class Group(DB.Model):
     id = DB.Column(DB.Integer, autoincrement=True, primary_key=True)
     name = DB.Column(DB.String(255), nullable=False)
     created = DB.Column(DB.DateTime(timezone=True), default=datetime.now())
+    team_size = DB.Column(DB.Integer)
 
     group_members = relationship(
         "GroupMember", back_populates="group", cascade="all, delete-orphan" 

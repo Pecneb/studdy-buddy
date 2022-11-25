@@ -12,7 +12,7 @@
     <div class="col s5">
         <form method="post" class="col s12 valign-wrapper">
             <div class="input-field col s10">
-                <select name="subject">
+                <select name="subject_id">
                     <option value="all">All</option>
                     {% for subject in subjects %}
                     <option value="{{ subject.id }}">{{ subject.name }}</option>
@@ -21,7 +21,7 @@
                 <label>Select Class</label>
             </div>
             <button class="col s2 btn waves-effect waves-light" style="background-color: #000;" type="submit"
-                name="action">
+                name="subject">
                 Select
                 <i class="material-icons right">send</i>
             </button>
