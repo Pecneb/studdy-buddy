@@ -51,7 +51,7 @@ def create_post():
             error = "Subject selection is required."
 
         if error is not None:
-            flash(error,"error")
+            flash(error)
         else:
             try:
                 post = Post(

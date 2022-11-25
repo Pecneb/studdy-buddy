@@ -45,7 +45,7 @@ def register():
             else:
                 return redirect(url_for("auth.login"))
         
-        flash(error,"error")
+        flash(error)
 
     return render_template('auth/register.html')
 
@@ -73,7 +73,7 @@ def login():
             session['neptun'] = user.neptun
             return redirect(url_for('menu.index'))
 
-        flash(error,"error")
+        flash(error)
 
     return render_template('auth/login.html')
 
