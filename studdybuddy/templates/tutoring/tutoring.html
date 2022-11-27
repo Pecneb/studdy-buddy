@@ -4,12 +4,12 @@
 
 {% block header %}
 <div class="row valign-wrapper">
-    <a class="col s1 left" href="{{ url_for('menu.index') }}"><img width="35%" height="35%"
+    <a class="col s4 m1 left" href="{{ url_for('menu.index') }}"><img width="35%" height="35%"
             src="{{ url_for('static', filename='back_arrow.png') }}" alt=""></a>
-    <div class="col s4 valign-wrapper">
+    <div class="col s6 m4 valign-wrapper">
         <img class="col s4" width="100%" height="100%" src="{{ url_for('static', filename='book_1.png') }}" alt="">
     </div>
-    <div class="col s5">
+    <div class="col s12 m5">
         <form method="post" class="col s12 valign-wrapper">
             <div class="input-field col s10">
                 <select name="subject_id">
@@ -36,7 +36,7 @@
     <div class="row">
         {% for tutoring in tutorings %}
         <div>
-            <div class="col s4">
+            <div class="col s12 m4">
                 <div class="card blue-grey darken-1">
                     <div class="card-content white-text">
                         <span class="card-title">{{ tutoring.tutoring_name }}</span>

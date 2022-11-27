@@ -4,12 +4,12 @@
 
 {% block header %}
 <div class="row valign-wrapper">
-    <a class="col s1 left" href="{{ url_for('menu.index') }}"><img width="35%" height="35%" src="{{ url_for('static', filename='back_arrow.png') }}" alt=""></a>
-    <div class="col s4 valign-wrapper">
+    <a class="col s6 m1 left" href="{{ url_for('menu.index') }}"><img width="50%" height="50%" src="{{ url_for('static', filename='back_arrow.png') }}" alt=""></a>
+    <div class="col s12 m4 valign-wrapper">
         <img class="col s4" width="100%" height="100%" src="{{ url_for('static', filename='book_1.png') }}" alt="">
         <img class="col s8" width="60%" height="60%" src="{{ url_for('static', filename='tanulotars_kereses.png') }}" alt="" >
     </div>
-    <div class="col s5">
+    <div class="col s12 m5">
         <form method="post" class="col s12 valign-wrapper">
             <div class="input-field col s10">
                 <select name="tantargy">
@@ -26,14 +26,14 @@
             </button>
         </form>
     </div>
-    <a class="waves-effect waves-light btn black col s2" href="{{ url_for('findpartner.create_post') }}">Create Post</a>
+    <a class="waves-effect waves-light btn black col s12 m2" href="{{ url_for('findpartner.create_post') }}">Create Post</a>
 </div>
 {% endblock %}
 {% block content %}
 <div class="row">
     {% for post in posts %}
     <div>
-        <div class="col s4">
+        <div class="col s12 m4">
             <div class="card blue-grey darken-1">
                 <div class="card-content white-text">
                     <span class="card-title">{{ post.title }}</span>
@@ -48,10 +48,6 @@
                             Contact
                             <i class="material-icons right">send</i>
                             </button>
-                            <button value="add" class="btn waves-effect waves-light" style="background-color: transparent; color: #ffab40;" type="submit" name="action">
-                            Add to buddies
-                            <i class="material-icons right">add_circle</i>
-                            </button>   
                         </div>
                 </form>
             </div>
