@@ -1,62 +1,61 @@
-{% extends 'base.html' %}
-
-{% block title %}Findpartner{% endblock %}
-
-{% block header %}
+{% extends 'base.html' %} {% block title %}Findpartner{% endblock %} {% block header %}
 <div class="row valign-wrapper">
-    <a class="col s1 left" href="{{ url_for('menu.index') }}"><img width="35%" height="35%" src="{{ url_for('static', filename='back_arrow.png') }}" alt=""></a>
-    <div class="col s4 valign-wrapper">
-        <img class="col s4" width="100%" height="100%" src="{{ url_for('static', filename='book_1.png') }}" alt="">
-        <img class="col s8" width="60%" height="60%" src="{{ url_for('static', filename='tanulotars_kereses.png') }}" alt="" >
-    </div>
-    <div class="col s5">
-        <form method="post" class="col s12 valign-wrapper">
-            <div class="input-field col s10">
-                <select name="tantargy">
-                    <option value="all">All</option>
-                    {% for tantargy in tantargyak %}
-                    <option value="{{ tantargy.id }}">{{ tantargy.name }}</option>
-                    {% endfor %}
-                </select>
-                <label>Select Class</label>
-            </div>
-            <button class="col s2 btn waves-effect waves-light" style="background-color: #000; margin-top: 5%;" type="submit" name="action">
-              Select
+  <a class="col s1 left" href="{{ url_for('menu.index') }}"
+    ><img width="35%" height="35%" src="{{ url_for('static', filename='back_arrow.png') }}" alt=""
+  /></a>
+  <div class="col s4 valign-wrapper">
+    <img class="col s4" width="100%" height="100%" src="{{ url_for('static', filename='book_1.png') }}" alt="" />
+    <img class="col s8" width="60%" height="60%" src="{{ url_for('static', filename='tanulotars_kereses.png') }}" alt="" />
+  </div>
+  <div class="col s5">
+    <form method="post" class="col s12 valign-wrapper">
+      <div class="input-field col s10">
+        <select name="tantargy">
+          <option value="all">All</option>
+          {% for tantargy in tantargyak %}
+          <option value="{{ tantargy.id }}">{{ tantargy.name }}</option>
+          {% endfor %}
+        </select>
+        <label>Select Class</label>
+      </div>
+      <button class="col s2 btn waves-effect waves-light" style="background-color: #000; margin-top: 5%" type="submit" name="action">
+        Select
+        <i class="material-icons right">send</i>
+      </button>
+    </form>
+  </div>
+  <a class="waves-effect waves-light btn black col s2" href="{{ url_for('findpartner.create_post') }}">Create Post</a>
+</div>
+{% endblock %} {% block content %}
+<div class="row">
+  {% for post in posts %}
+  <div>
+    <div class="col s4">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+          <span class="card-title">{{ post.title }}</span>
+          <p>{{ post.body }}</p>
+          <p>User: {{ post.student_neptun }}</p>
+          <p>Tantargy: {{ post.subject_id }}</p>
+          <p>Creation date: {{ post.created }}</p>
+        </div>
+        <form method="post">
+          <div class="card-action">
+            <button
+              value="{{post.student_neptun}}"
+              class="btn waves-effect waves-light"
+              style="background-color: transparent; color: #ffab40"
+              type="submit"
+              name="contact"
+            >
+              Contact
               <i class="material-icons right">send</i>
             </button>
+          </div>
         </form>
+      </div>
     </div>
-    <a class="waves-effect waves-light btn black col s2" href="{{ url_for('findpartner.create_post') }}">Create Post</a>
-</div>
-{% endblock %}
-{% block content %}
-<div class="row">
-    {% for post in posts %}
-    <div>
-        <div class="col s4">
-            <div class="card blue-grey darken-1">
-                <div class="card-content white-text">
-                    <span class="card-title">{{ post.title }}</span>
-                    <p>{{ post.body }}</p>
-                    <p>User: {{ post.student_neptun }}</p>
-                    <p>Tantargy: {{ post.subject_id }}</p>
-                    <p>Creation date: {{ post.created }}</p>
-                </div>
-                <form method="post">
-                        <div class="card-action">
-                            <button value="contact" class="btn waves-effect waves-light" style="background-color: transparent; color: #ffab40;" type="submit" name="action">
-                            Contact
-                            <i class="material-icons right">send</i>
-                            </button>
-                            <button value="add" class="btn waves-effect waves-light" style="background-color: transparent; color: #ffab40;" type="submit" name="action">
-                            Add to buddies
-                            <i class="material-icons right">add_circle</i>
-                            </button>   
-                        </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    {% endfor %}
+  </div>
+  {% endfor %}
 </div>
 {% endblock %}

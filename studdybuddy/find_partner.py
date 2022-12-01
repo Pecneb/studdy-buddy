@@ -2,7 +2,8 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
 from studdybuddy.db import DB as db 
-from studdybuddy.db import Subject, Post
+from studdybuddy.db import Subject, Post, Relations,Student
+from sqlalchemy import or_, and_
 from studdybuddy.auth import login_required
 from sqlalchemy.exc import DBAPIError
 
@@ -12,8 +13,31 @@ bp = Blueprint('findpartner', __name__, url_prefix='/findpartner')
 @login_required
 def findpartner():
     if request.method == 'POST':
-        tfilter = request.form['tantargy']
-        g.tfilter = tfilter
+        print(request.form['contact'])
+        user = db.session.get(Student, g.user.neptun)
+        if request.form['contact'] != user.neptun:
+            existing_relations=db.session.execute(
+                db.select(Relations).filter(
+                    or_(Relations.neptun2 == user.neptun,
+                        Relations.neptun1 == user.neptun))).scalars()
+            is_exists=False
+            for relation in existing_relations:
+                if (relation.neptun1 == user.neptun and
+                    relation.neptun2 == request.form['contact']
+                    ) or (
+                    relation.neptun2 == user.neptun and
+                    relation.neptun1 == request.form['contact']):
+                        
+                        is_exists=True
+                        break
+                        
+            if not is_exists:
+                newrel=Relations(neptun1=g.user.neptun, neptun2=request.form['contact'])
+                db.session.add(newrel)
+                db.session.commit()
+            return redirect(url_for('messages.chat', id=request.form['contact']))
+            
+            
     # Query classes from db
     tantargyak = db.session.execute(
         db.select(Subject)
