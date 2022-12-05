@@ -41,6 +41,11 @@ class Post(DB.Model):
     body = DB.Column(DB.String(500), nullable=False)
     created = DB.Column(DB.DateTime(timezone=True), default=datetime.now())
 
+    @hybrid_property
+    def subject_name(self):
+        obj = Subject.query.filter_by(id=self.subject_id).first()
+        return obj.name
+
 class Subject(DB.Model):
     __tablename__ = "subject"
     id = DB.Column(DB.String(255), primary_key=True)
@@ -78,7 +83,7 @@ class Group(DB.Model):
     id = DB.Column(DB.Integer, autoincrement=True, primary_key=True)
     name = DB.Column(DB.String(255), nullable=False)
     created = DB.Column(DB.DateTime(timezone=True), default=datetime.now())
-    team_size = DB.Column(DB.Integer)
+    team_size = DB.Column(DB.Integer, nullable=False)
 
     group_members = relationship(
         "GroupMember", back_populates="group", cascade="all, delete-orphan" 
