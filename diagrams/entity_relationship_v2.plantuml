@@ -1,0 +1,117 @@
+@startuml
+
+class Student {
+    .. Fields ..
+    PK neptun : str(6)
+    firstname : str(255)
+    lastname : str(255)
+    password : str(255)
+    email : str(255)
+}
+
+class Relations {
+    .. Fields ..
+    PK id : int
+    FK neptun1 : str(6)
+    FK neptun2 : str(6)
+    is_buddies : bool
+}
+
+class Message {
+    .. Fields ..
+    PK id : int
+    FK relation : int
+    FK sender : str(6)
+    message : str(255)
+    creationtime : datetime
+}
+
+class Post {
+    .. Fields ..
+    PK id : int
+    FK student_neptun : str(6)
+    FK subject_id : str(255)
+    title : str(30)
+    body : str(500)
+    created : datetime
+    .. Methods ..
+    str subject_name()
+}
+
+class Subject {
+    .. Fields ..
+    PK id : str(255)
+    name : str(255)
+}
+
+class Tutoring {
+    .. Fields ..
+    PK id : int
+    FK tutor_neptun : str(6)
+    tutoring_name : str(255)
+    FK subject_id : str(255)
+    created : datetime
+    start_datetime : datetime
+    end_datetime : datetime
+    max_participants : int
+    .. Methods ..
+    str tutor_name()
+    str subject_name()
+}
+
+class TutoringParticipant {
+    .. Fields ..
+    PK id : int
+    FK student_neptun : str(6)
+    FK tutoring_id : int
+}
+
+class Group {
+    .. Fields ..
+    PK id : int
+    name : str(255)
+    created : datetime
+    team_size : int
+}
+
+class GroupMember {
+    .. Fields ..
+    PK id : int
+    FK student_neptun : str(6)
+    FK group_id : int
+    admin : bool
+}
+
+class GroupPost {
+    .. Fields ..
+    PK id : int
+    FK group_member_id : int
+    FK group_id : int
+    body : str(255)
+}
+
+class GroupRequests {
+    .. Fields ..
+    PK id : int
+    FK group_id : int
+    FK sender : str(6)
+    message : str(500)
+}
+
+Student --{ Relations : on neptun_1 and neptun_2
+Student --{ Message : on sender
+Student --{ Post : on student_neptun
+Student --{ Tutoring : on tutor_neptun 
+Student --{ TutoringParticipant : on student_neptun
+Student --{ GroupMember : on student_neptun
+Student --{ GroupRequests : on sender
+Subject --{ Post : on subject_id 
+Subject --{ Tutoring : on subject_id 
+Group --{ GroupMember : on group_id
+Group --{ GroupPost : on group_id
+Group --{ GroupRequests : on group_id
+GroupPost }-- GroupMember : on group_member_id
+Relations --{ Message : on relation 
+Tutoring --{ TutoringParticipant : on tutoring_id
+
+@enduml
