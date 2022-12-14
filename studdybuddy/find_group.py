@@ -112,6 +112,7 @@ def group_view(id: int):
         .select_from(GroupRequests)
         .join(Group)
         .where(GroupRequests.sender == Student.neptun)
+        .where(GroupRequests.group_id == id)
     ).all()
     if request.method == 'POST':
         if g.user in group_members:
